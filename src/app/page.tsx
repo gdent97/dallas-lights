@@ -58,9 +58,9 @@ export default function HomePage() {
       <section className="max-w-6xl mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           {[
-            { icon: '✓', title: 'Verified Local Companies', body: 'Every listing is a real Dallas-area business. Licensed and insured pros only.' },
-            { icon: '⭐', title: 'Rated & Reviewed', body: 'Real customer reviews help you pick the right company for your project.' },
-            { icon: '💬', title: 'Free Quotes', body: 'Submit one request and hear back from multiple local lighting companies.' },
+            { icon: '✓', title: 'Real Local Companies', body: 'Every listing is a genuine Dallas–Fort Worth lighting business, with details from each company.' },
+            { icon: '🗺️', title: 'Every Specialty', body: 'Residential, commercial, outdoor, holiday, smart-home, and electrician pros, all in one place.' },
+            { icon: '💬', title: 'Free to Use', body: 'Browse companies and request a quote directly — at no cost to you.' },
           ].map((item) => (
             <div key={item.title} className="bg-white rounded-xl border border-gray-200 p-6">
               <div className="text-3xl mb-3">{item.icon}</div>
