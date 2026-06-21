@@ -1,0 +1,11 @@
+.next/
+node_modules/
+.env.local
+.env*.local
+out/
+build/
+*.tsbuildinfo
+.DS_Store
+
+# Local Claude Code config (may contain tokens)
+.claude/
