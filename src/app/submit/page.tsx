@@ -3,7 +3,7 @@ import ListingSubmitForm from '@/components/ListingSubmitForm'
 
 export const metadata: Metadata = {
   title: 'Add Your Lighting Business to DallasLights.com',
-  description: 'List your Dallas-area lighting company for free. Reach thousands of homeowners and businesses searching for lighting services in DFW.',
+  description: 'List your Dallas–Fort Worth lighting company for free. Get found by local homeowners searching for lighting services across DFW.',
 }
 
 const TIERS = [
@@ -58,8 +58,16 @@ export default function SubmitPage() {
           Add Your Dallas Lighting Business
         </h1>
         <p className="text-gray-600 max-w-xl mx-auto">
-          Reach thousands of Dallas homeowners and property managers actively searching for lighting services.
+          Get your lighting company in front of Dallas–Fort Worth homeowners searching for local installers.
           Start with a free listing — upgrade anytime.
+        </p>
+      </div>
+
+      {/* Founding offer */}
+      <div className="max-w-3xl mx-auto mb-10 bg-brand-500 text-white rounded-xl px-6 py-4 text-center">
+        <p className="font-bold">🚀 Founding Member Offer — Launch Special</p>
+        <p className="text-sm text-white/90 mt-1">
+          We just launched, so founding members lock in <strong>50% off for life</strong> plus a <strong>free first month</strong>. Limited spots per category during our launch window.
         </p>
       </div>
 
