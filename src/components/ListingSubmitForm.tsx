@@ -1,13 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-
-/**
- * Free Web3Forms access key. This is SAFE to be public — it only routes
- * form submissions to the owner's email and can't be used for anything else.
- * Get one in 30 seconds at https://web3forms.com (enter grayson@pilotfinancial.co).
- */
-const WEB3FORMS_KEY = '67d3afbd-28cd-435b-91bb-fcd7d8808ed9'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -26,7 +20,7 @@ export default function ListingSubmitForm() {
     formData.append('from_name', 'DallasLights.com')
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: 'POST',
         headers: { Accept: 'application/json' },
         body: formData,

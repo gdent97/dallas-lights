@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
 
 interface Props {
   companyName: string
@@ -13,16 +14,22 @@ export default function LeadForm({ companyName, companyId }: Props) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('sending')
-    const form = e.currentTarget
-    const data = Object.fromEntries(new FormData(form))
+
+    const formData = new FormData(e.currentTarget)
+    formData.append('access_key', WEB3FORMS_KEY)
+    formData.append('subject', `New quote request for ${companyName} — DallasLights.com`)
+    formData.append('from_name', 'DallasLights.com')
+    formData.append('company', companyName)
+    formData.append('companyId', companyId)
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, companyId, companyName }),
+        headers: { Accept: 'application/json' },
+        body: formData,
       })
-      if (!res.ok) throw new Error()
+      const data = await res.json()
+      if (!data.success) throw new Error()
       setStatus('sent')
     } catch {
       setStatus('error')
@@ -34,7 +41,7 @@ export default function LeadForm({ companyName, companyId }: Props) {
       <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
         <div className="text-2xl mb-2">✓</div>
         <p className="font-semibold text-green-800">Request sent!</p>
-        <p className="text-sm text-green-600 mt-1">{companyName} will contact you shortly.</p>
+        <p className="text-sm text-green-600 mt-1">Thanks — we&apos;ve received your request and someone will be in touch shortly.</p>
       </div>
     )
   }
