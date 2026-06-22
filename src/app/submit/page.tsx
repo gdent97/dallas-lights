@@ -84,7 +84,7 @@ export default function SubmitPage() {
               ))}
             </ul>
             <a
-              href={`mailto:listings@dallaslights.com?subject=${encodeURIComponent(`${tier.name} listing inquiry`)}`}
+              href={`mailto:grayson@pilotfinancial.co?subject=${encodeURIComponent(`${tier.name} listing inquiry`)}`}
               className={`block text-center font-semibold py-2.5 rounded-lg transition-colors text-sm ${tier.highlight ? 'bg-brand-500 hover:bg-brand-600 text-white' : 'bg-gray-900 hover:bg-gray-800 text-white'}`}
             >
               {tier.cta}
@@ -99,7 +99,7 @@ export default function SubmitPage() {
         <p className="text-sm text-gray-500 mb-6">We'll review and publish your listing within 24 hours.</p>
 
         <form
-          action="mailto:listings@dallaslights.com"
+          action="mailto:grayson@pilotfinancial.co"
           method="GET"
           encType="text/plain"
           className="space-y-4"
