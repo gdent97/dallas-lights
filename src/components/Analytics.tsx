@@ -10,7 +10,9 @@ import Script from 'next/script'
  * You only need ONE. If both are set, both load.
  */
 export default function Analytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID
+  // Google Analytics 4 Measurement ID. Hardcoded (it's public — appears in page
+  // source anyway). Can be overridden with the NEXT_PUBLIC_GA_ID env var.
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || 'G-97HSKD4PQQ'
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN
 
   return (
