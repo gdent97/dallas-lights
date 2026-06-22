@@ -203,7 +203,9 @@ export default function CompanyPage({ params }: Props) {
 
           {/* Sidebar */}
           <div className="space-y-4">
-            <LeadForm companyName={listing.name} companyId={listing.id} />
+            {listing.tier !== 'free' && (
+              <LeadForm companyName={listing.name} companyId={listing.id} />
+            )}
 
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
               <h3 className="font-bold text-gray-900">Contact</h3>
@@ -227,7 +229,7 @@ export default function CompanyPage({ params }: Props) {
             {listing.tier === 'free' && (
               <div className="bg-brand-50 border border-brand-200 rounded-xl p-4 text-sm">
                 <p className="font-semibold text-brand-800 mb-1">Is this your business?</p>
-                <p className="text-brand-700 mb-3">Upgrade to a Premium listing to add photos, services, and appear higher in search results.</p>
+                <p className="text-brand-700 mb-3">Upgrade to Premium to add photos, get top placement in your category, and receive quote requests straight to your inbox.</p>
                 <Link href="/submit?tier=premium" className="block text-center bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2 rounded-lg transition-colors text-sm">
                   Claim & Upgrade
                 </Link>
