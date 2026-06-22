@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { CATEGORIES } from '@/lib/categories'
 import { LISTINGS } from '@/lib/listings'
 import { getCityCategoryCombos } from '@/lib/cities'
+import { GUIDES } from '@/lib/guides'
 
 const BASE = 'https://dallaslights.com'
 
@@ -34,5 +35,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticRoutes, ...categoryRoutes, ...cityCategoryRoutes, ...listingRoutes]
+  const guideRoutes: MetadataRoute.Sitemap = [
+    { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    ...GUIDES.map((g) => ({
+      url: `${BASE}/guides/${g.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+  ]
+
+  return [...staticRoutes, ...categoryRoutes, ...cityCategoryRoutes, ...guideRoutes, ...listingRoutes]
 }

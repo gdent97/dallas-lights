@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
+import NewsletterSignup from '@/components/NewsletterSignup'
 import { getFeaturedListings, getAllListings } from '@/lib/listings'
 import { CATEGORIES } from '@/lib/categories'
+import { GUIDES } from '@/lib/guides'
 
 export const metadata: Metadata = {
   title: 'Dallas Lights — Find Lighting Companies in Dallas, TX',
@@ -108,11 +110,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Guides */}
+      {GUIDES.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 py-14">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">DFW Lighting Guides</h2>
+          <p className="text-gray-500 mb-6">Local guides to lighting across Dallas–Fort Worth.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {GUIDES.map((g) => (
+              <Link
+                key={g.slug}
+                href={`/guides/${g.slug}`}
+                className="block bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+              >
+                <h3 className="font-bold text-gray-900">{g.title}</h3>
+                <p className="text-sm text-gray-500 mt-1">{g.excerpt}</p>
+                <span className="text-sm text-brand-700 font-medium mt-2 inline-block">Read guide →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* CTA for businesses */}
       <section className="max-w-3xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">Own a Lighting Company in Dallas?</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">Own a Lighting Company in DFW?</h2>
         <p className="text-gray-600 mb-6">
-          Get your business in front of thousands of Dallas homeowners and property managers searching for lighting services.
+          Get your business in front of Dallas–Fort Worth homeowners searching for local lighting services.
           Basic listings are always free.
         </p>
         <Link
@@ -122,6 +145,8 @@ export default function HomePage() {
           Add Your Business — Free
         </Link>
       </section>
+
+      <NewsletterSignup />
     </>
   )
 }
