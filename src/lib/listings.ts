@@ -439,3 +439,24 @@ export function getFeaturedListings(): Listing[] {
 export function getAllListings(): Listing[] {
   return [...LISTINGS].sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier])
 }
+
+// Tokens in `areasServed` that mean "serves the whole metro" — these companies
+// should appear on every city page.
+const METRO_TOKENS = ['DFW Metroplex', 'Dallas–Fort Worth', 'Dallas-Fort Worth', 'DFW', 'North Dallas']
+
+function servesCity(listing: Listing, cityName: string): boolean {
+  return listing.areasServed.some(
+    (area) => area === cityName || METRO_TOKENS.includes(area),
+  )
+}
+
+/** Companies in a given category that serve a given city (by city name). */
+export function listingsForCategoryCity(category: Category, cityName: string): Listing[] {
+  return LISTINGS
+    .filter((l) => l.category.includes(category) && servesCity(l, cityName))
+    .sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier])
+}
+
+// Minimum companies required to publish a city+category page (avoids thin pages).
+export const MIN_CITY_PAGE_LISTINGS = 2
+

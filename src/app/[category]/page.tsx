@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
 import { getCategoryMeta, CATEGORIES } from '@/lib/categories'
 import { getListingsByCategory } from '@/lib/listings'
+import { citiesForCategory } from '@/lib/cities'
 import type { Category } from '@/lib/types'
 
 interface Props {
@@ -33,6 +34,7 @@ export default function CategoryPage({ params }: Props) {
   if (!cat) notFound()
 
   const listings = getListingsByCategory(params.category as Category)
+  const cities = citiesForCategory(params.category as Category)
 
   const schema = {
     '@context': 'https://schema.org',
@@ -86,6 +88,24 @@ export default function CategoryPage({ params }: Props) {
           </>
         )}
       </section>
+
+      {/* Browse by city (internal linking) */}
+      {cities.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 pb-16">
+          <h2 className="font-bold text-gray-900 mb-3">{cat.title} by city</h2>
+          <div className="flex flex-wrap gap-2">
+            {cities.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/${cat.slug}/${c.slug}`}
+                className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full transition-colors"
+              >
+                {cat.title} in {c.name}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Upgrade CTA */}
       <section className="bg-brand-50 border-t border-brand-100 py-10 px-4">
