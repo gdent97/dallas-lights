@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import ListingSubmitForm from '@/components/ListingSubmitForm'
 
 export const metadata: Metadata = {
   title: 'Add Your Lighting Business to DallasLights.com',
@@ -98,47 +98,7 @@ export default function SubmitPage() {
         <h2 className="text-xl font-bold text-gray-900 mb-1">Submit a Free Listing</h2>
         <p className="text-sm text-gray-500 mb-6">We'll review and publish your listing within 24 hours.</p>
 
-        <form
-          action="mailto:grayson@pilotfinancial.co"
-          method="GET"
-          encType="text/plain"
-          className="space-y-4"
-        >
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Business Name *</label>
-            <input name="business_name" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-            <input name="phone" type="tel" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
-            <input name="website" type="url" placeholder="https://" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-            <select name="category" required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400">
-              <option value="">Select a category…</option>
-              <option>Residential Lighting</option>
-              <option>Commercial Lighting</option>
-              <option>Outdoor & Landscape Lighting</option>
-              <option>Lighting Electricians</option>
-              <option>Smart Home Lighting</option>
-              <option>Holiday & Event Lighting</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Short Description *</label>
-            <textarea name="description" rows={3} required className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 resize-none" />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
-          >
-            Submit Free Listing
-          </button>
-        </form>
+        <ListingSubmitForm />
       </div>
     </div>
   )
