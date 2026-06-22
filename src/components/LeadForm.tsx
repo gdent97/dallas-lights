@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, trackConversion } from '@/lib/forms'
 
 interface Props {
   companyName: string
@@ -31,6 +31,7 @@ export default function LeadForm({ companyName, companyId }: Props) {
       const data = await res.json()
       if (!data.success) throw new Error()
       setStatus('sent')
+      trackConversion('generate_lead', { lead_type: 'company_quote', company: companyName })
     } catch {
       setStatus('error')
     }
