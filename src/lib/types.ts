@@ -32,6 +32,8 @@ export interface Listing {
   licenseNumber?: string
   insured?: boolean
   logo?: string
+  /** Background tone behind the logo. Use 'dark' for white/light logos. Default 'light'. */
+  logoBg?: 'light' | 'dark'
   photos?: string[]
   rating?: number
   reviewCount?: number

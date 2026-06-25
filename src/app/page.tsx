@@ -22,7 +22,9 @@ const SCHEMA = {
 
 export default function HomePage() {
   const featured = getFeaturedListings()
-  const spotlight = featured.length > 0 ? featured : getAllListings().slice(0, 6)
+  // getAllListings() sorts featured → premium → free, so featured companies
+  // naturally lead the spotlight while still showing a full row.
+  const spotlight = getAllListings().slice(0, 6)
   const totalCount = getAllListings().length
 
   return (

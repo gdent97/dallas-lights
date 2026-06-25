@@ -30,13 +30,13 @@ export default function ListingCard({ listing }: Props) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 flex-1 min-w-0">
           {listing.logo && (
-            <div className="relative w-11 h-11 shrink-0 rounded-lg overflow-hidden bg-gray-50 border border-gray-100">
+            <div className={`relative w-14 h-11 shrink-0 rounded-lg overflow-hidden border ${listing.logoBg === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-100'}`}>
               <Image
                 src={listing.logo}
                 alt={`${listing.name} logo`}
                 fill
-                sizes="44px"
-                className="object-contain p-0.5"
+                sizes="56px"
+                className="object-contain p-1"
               />
             </div>
           )}

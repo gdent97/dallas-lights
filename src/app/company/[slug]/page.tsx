@@ -92,13 +92,13 @@ export default function CompanyPage({ params }: Props) {
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
                   {listing.logo && (
-                    <div className="relative w-20 h-20 mb-3 rounded-lg overflow-hidden bg-gray-50 border border-gray-100">
+                    <div className={`relative w-24 h-20 mb-3 rounded-lg overflow-hidden border ${listing.logoBg === 'dark' ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-100'}`}>
                       <Image
                         src={listing.logo}
                         alt={`${listing.name} logo`}
                         fill
-                        sizes="80px"
-                        className="object-contain p-1.5"
+                        sizes="96px"
+                        className="object-contain p-2"
                       />
                     </div>
                   )}

@@ -115,11 +115,13 @@ export const LISTINGS: Listing[] = [
     id: '5',
     slug: 'nightsculptures',
     name: 'NightSculptures Outdoor Lighting',
-    tier: 'premium',
+    tier: 'featured',
     category: ['outdoor', 'residential'],
     phone: '(682) 217-4612',
     email: 'nightsculptures@gmail.com',
     website: 'https://www.nightsculptures.com/',
+    logo: '/companies/nightsculptures/logo.png',
+    logoBg: 'dark',
     city: 'Fort Worth',
     state: 'TX',
     description: 'Custom landscape, architectural, and outdoor lighting design across Dallas–Fort Worth.',
@@ -127,7 +129,7 @@ export const LISTINGS: Listing[] = [
 
 Serving Fort Worth, Dallas, and communities across the metroplex, the team focuses on clean, professional craftsmanship and ongoing maintenance so your lighting looks its best season after season.`,
     services: ['Landscape Lighting', 'Architectural & Facade Lighting', 'Home Exterior Lighting', 'Tree & Up-Lighting', 'Path & Walkway Lighting', 'Hardscape & Wall Lighting', 'Poolside Lighting', 'Pergola Lighting', 'Color-Changing (RGB) Lighting', 'Specialty & Feature Lighting', 'Maintenance'],
-    areasServed: ['Fort Worth', 'Dallas', 'Southlake', 'Colleyville', 'Keller', 'Flower Mound', 'Grapevine', 'Coppell', 'Arlington', 'Frisco', 'McKinney'],
+    areasServed: ['Fort Worth', 'Southlake', 'Colleyville', 'Keller', 'Flower Mound', 'Grapevine', 'Coppell', 'Arlington', 'Frisco', 'McKinney'],
     photos: [
       '/companies/nightsculptures/1.jpg',
       '/companies/nightsculptures/2.jpg',
@@ -138,7 +140,7 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
       '/companies/nightsculptures/7.jpg',
       '/companies/nightsculptures/8.jpg',
     ],
-    featured: false,
+    featured: true,
   },
   {
     id: '6',
