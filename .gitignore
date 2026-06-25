@@ -9,3 +9,6 @@ build/
 
 # Local Claude Code config (may contain tokens)
 .claude/
+
+# Raw customer image uploads (staging — processed copies live in public/)
+Customer *Images/
