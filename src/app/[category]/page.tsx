@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
+import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import { getCategoryMeta, CATEGORIES } from '@/lib/categories'
 import { getListingsByCategory } from '@/lib/listings'
 import { citiesForCategory } from '@/lib/cities'
@@ -35,6 +36,10 @@ export default function CategoryPage({ params }: Props) {
 
   const listings = getListingsByCategory(params.category as Category)
   const cities = citiesForCategory(params.category as Category)
+
+  // Pull the featured partner into a prominent spotlight above the grid.
+  const featuredHere = listings.find((l) => l.featured || l.tier === 'featured')
+  const rest = featuredHere ? listings.filter((l) => l.id !== featuredHere.id) : listings
 
   const schema = {
     '@context': 'https://schema.org',
@@ -70,8 +75,11 @@ export default function CategoryPage({ params }: Props) {
         <p className="text-gray-600 max-w-2xl">{cat.description}</p>
       </section>
 
+      {/* Featured partner spotlight */}
+      {featuredHere && <FeaturedSpotlight listing={featuredHere} />}
+
       {/* Listings */}
-      <section className="max-w-6xl mx-auto px-4 pb-16">
+      <section className="max-w-6xl mx-auto px-4 pb-16 pt-8">
         {listings.length === 0 ? (
           <div className="text-center py-16 text-gray-500">
             <p className="text-lg mb-4">No listings yet for this category.</p>
@@ -83,7 +91,7 @@ export default function CategoryPage({ params }: Props) {
           <>
             <p className="text-sm text-gray-500 mb-5">{listings.length} companies found</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
+              {rest.map((l) => <ListingCard key={l.id} listing={l} />)}
             </div>
           </>
         )}

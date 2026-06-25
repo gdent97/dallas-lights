@@ -65,9 +65,9 @@ export default function SubmitPage() {
 
       {/* Founding offer */}
       <div className="max-w-3xl mx-auto mb-10 bg-brand-500 text-white rounded-xl px-6 py-4 text-center">
-        <p className="font-bold">🚀 Founding Member Offer — Launch Special</p>
+        <p className="font-bold">🚀 Founding Member Offer</p>
         <p className="text-sm text-white/90 mt-1">
-          We just launched, so founding members lock in <strong>50% off for life</strong> plus a <strong>free first month</strong>. Limited spots per category during our launch window.
+          Founding members lock in <strong>50% off for life</strong>. Limited founding spots per category.
         </p>
       </div>
 
