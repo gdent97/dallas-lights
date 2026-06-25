@@ -145,6 +145,23 @@ export default function CompanyPage({ params }: Props) {
             {/* Photos (premium listings) */}
             {listing.photos && <PhotoGallery photos={listing.photos} name={listing.name} />}
 
+            {/* Featured article (linked to the company's own site) */}
+            {listing.article && (
+              <div className="bg-white border border-gray-200 rounded-xl p-6">
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-600">📖 Featured Article</span>
+                <h2 className="font-bold text-gray-900 text-lg mt-2">{listing.article.title}</h2>
+                <p className="text-sm text-gray-600 mt-2 leading-relaxed">{listing.article.excerpt}</p>
+                <a
+                  href={listing.article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-3 text-sm font-semibold text-brand-700 hover:text-brand-800"
+                >
+                  Read the full article on {listing.name} →
+                </a>
+              </div>
+            )}
+
             {/* Services */}
             {listing.services.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-xl p-6">

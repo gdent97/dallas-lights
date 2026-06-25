@@ -53,6 +53,17 @@ export default function FeaturedSpotlight({ listing }: { listing: Listing }) {
             </div>
           )}
 
+          {listing.article && (
+            <a
+              href={listing.article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 text-sm font-medium text-brand-700 hover:text-brand-800"
+            >
+              📖 {listing.article.title} →
+            </a>
+          )}
+
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href={`/company/${listing.slug}`}

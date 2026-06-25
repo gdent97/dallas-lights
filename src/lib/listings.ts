@@ -140,6 +140,11 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
       '/companies/nightsculptures/7.jpg',
       '/companies/nightsculptures/8.jpg',
     ],
+    article: {
+      title: 'Fort Worth Landscape Lighting: 3 Creative Outdoor Ideas',
+      url: 'https://www.nightsculptures.com/post/3-creative-ways-to-illuminate-and-make-your-outdoor-spaces-stand-out-this-fall',
+      excerpt: "NightSculptures shares three ways to elevate a Fort Worth yard after dark — up-lighting ornamental and native trees, highlighting your home's architecture, and lighting poolside and patio areas for entertaining.",
+    },
     featured: true,
   },
   {

@@ -34,6 +34,8 @@ export interface Listing {
   logo?: string
   /** Background tone behind the logo. Use 'dark' for white/light logos. Default 'light'. */
   logoBg?: 'light' | 'dark'
+  /** A featured article from the company's own site (linked out, not copied). */
+  article?: { title: string; url: string; excerpt: string }
   photos?: string[]
   rating?: number
   reviewCount?: number
