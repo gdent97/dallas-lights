@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
+import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import { getCategoryMeta } from '@/lib/categories'
 import { listingsForCategoryCity, MIN_CITY_PAGE_LISTINGS } from '@/lib/listings'
 import { getCityBySlug, getCityCategoryCombos, citiesForCategory } from '@/lib/cities'
@@ -38,6 +39,10 @@ export default function CityCategoryPage({ params }: Props) {
   if (listings.length < MIN_CITY_PAGE_LISTINGS) notFound()
 
   const otherCities = citiesForCategory(cat.slug).filter((c) => c.slug !== city.slug)
+
+  // Pull the featured partner (if any) into a prominent spotlight above the grid.
+  const featuredHere = listings.find((l) => l.featured || l.tier === 'featured')
+  const rest = featuredHere ? listings.filter((l) => l.id !== featuredHere.id) : listings
 
   const faqs = [
     {
@@ -98,11 +103,14 @@ export default function CityCategoryPage({ params }: Props) {
         </p>
       </section>
 
+      {/* Featured partner spotlight (prominent above the list) */}
+      {featuredHere && <FeaturedSpotlight listing={featuredHere} />}
+
       {/* Listings */}
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <p className="text-sm text-gray-500 mb-5">{listings.length} companies found in {city.name}</p>
+      <section className="max-w-6xl mx-auto px-4 pb-12 pt-10">
+        <p className="text-sm text-gray-500 mb-5">{listings.length} companies serving {city.name}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
+          {rest.map((l) => <ListingCard key={l.id} listing={l} />)}
         </div>
       </section>
 
