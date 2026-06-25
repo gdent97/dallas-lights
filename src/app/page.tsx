@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
+import FeaturedSpotlight from '@/components/FeaturedSpotlight'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import { getFeaturedListings, getAllListings } from '@/lib/listings'
 import { CATEGORIES } from '@/lib/categories'
@@ -21,10 +22,11 @@ const SCHEMA = {
 }
 
 export default function HomePage() {
-  const featured = getFeaturedListings()
-  // getAllListings() sorts featured → premium → free, so featured companies
-  // naturally lead the spotlight while still showing a full row.
-  const spotlight = getAllListings().slice(0, 6)
+  const featuredPartner = getFeaturedListings()[0] ?? null
+  // Show the rest in the grid (the featured partner gets its own big spotlight above).
+  const spotlight = getAllListings()
+    .filter((l) => !(l.featured || l.tier === 'featured'))
+    .slice(0, 6)
   const totalCount = getAllListings().length
 
   return (
@@ -58,6 +60,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      {featuredPartner && <FeaturedSpotlight listing={featuredPartner} />}
+
       {/* Why use us */}
       <section className="max-w-6xl mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
@@ -79,9 +83,7 @@ export default function HomePage() {
       {spotlight.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 pb-14">
           <div className="flex items-end justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {featured.length > 0 ? 'Featured Dallas Lighting Companies' : 'Dallas Lighting Companies'}
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900">Dallas Lighting Companies</h2>
             <span className="text-sm text-gray-500">{totalCount} listed</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
