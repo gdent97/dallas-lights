@@ -37,9 +37,10 @@ export default function CategoryPage({ params }: Props) {
   const listings = getListingsByCategory(params.category as Category)
   const cities = citiesForCategory(params.category as Category)
 
-  // Pull the featured partner into a prominent spotlight above the grid.
-  const featuredHere = listings.find((l) => l.featured || l.tier === 'featured')
-  const rest = featuredHere ? listings.filter((l) => l.id !== featuredHere.id) : listings
+  // Pull every featured partner into prominent spotlights above the grid.
+  const featuredHere = listings.filter((l) => l.featured || l.tier === 'featured')
+  const featuredIds = new Set(featuredHere.map((l) => l.id))
+  const rest = listings.filter((l) => !featuredIds.has(l.id))
 
   const schema = {
     '@context': 'https://schema.org',
@@ -75,8 +76,15 @@ export default function CategoryPage({ params }: Props) {
         <p className="text-gray-600 max-w-2xl">{cat.description}</p>
       </section>
 
-      {/* Featured partner spotlight */}
-      {featuredHere && <FeaturedSpotlight listing={featuredHere} />}
+      {/* Featured partner spotlight(s) — two+ render side by side, equal tier. */}
+      {featuredHere.length === 1 && <FeaturedSpotlight listing={featuredHere[0]} />}
+      {featuredHere.length > 1 && (
+        <section className="max-w-6xl mx-auto px-4 pt-10">
+          <div className="grid md:grid-cols-2 gap-6 items-stretch">
+            {featuredHere.map((l) => <FeaturedSpotlight key={l.id} listing={l} compact />)}
+          </div>
+        </section>
+      )}
 
       {/* Listings */}
       <section className="max-w-6xl mx-auto px-4 pb-16 pt-8">
