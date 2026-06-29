@@ -432,6 +432,8 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
     category: ['outdoor', 'residential'],
     phone: '(469) 994-8559',
     website: 'https://landmarkdesignco.com/dallas-outdoor-lighting/',
+    logo: '/companies/landmark-design-co/logo.png',
+    logoBg: 'dark',
     city: 'Dallas',
     state: 'TX',
     description: "Luxury landscape lighting for Dallas–Fort Worth's finest homes.",
@@ -440,7 +442,7 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
 For more than 15 years, we have partnered with discerning homeowners, custom home builders, landscape architects, and designers to create sophisticated nighttime environments using premium brass fixtures, expert installation, and proven lighting techniques that eliminate glare while highlighting each property's unique character.
 
 From Preston Hollow and Highland Park to Westlake, Southlake, Frisco, Prosper, Lucas, Fairview and beyond, Landmark Design Co. is committed to delivering exceptional craftsmanship, lasting performance, and a level of service that reflects the quality of the homes we illuminate.`,
-    services: ['Architectural Lighting', 'Landscape Lighting Design', 'Landscape Lighting Installation', 'Tree Lighting', 'Pool & Outdoor Living Lighting', 'Premium Brass Fixtures', 'Lighting Maintenance'],
+    services: ['Landscape Lighting', 'Architectural Lighting', 'Estate & Large Property Lighting', 'Custom Christmas Lighting', 'Lake House & Vacation Home Lighting', 'Tree Lighting', 'Pool & Outdoor Living Lighting', 'Premium Brass Fixtures', 'Maintenance & Optimization'],
     areasServed: ['Dallas', 'Preston Hollow', 'Highland Park', 'University Park', 'Westlake', 'Southlake', 'Frisco', 'Prosper', 'Plano', 'Lucas', 'Fairview'],
     yearsInBusiness: 15,
     photos: [

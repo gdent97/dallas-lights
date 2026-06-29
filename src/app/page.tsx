@@ -60,7 +60,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {featuredPartners.map((l) => <FeaturedSpotlight key={l.id} listing={l} />)}
+      {featuredPartners.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 pt-10">
+          <div className="grid md:grid-cols-2 gap-6 items-stretch">
+            {featuredPartners.map((l) => <FeaturedSpotlight key={l.id} listing={l} compact />)}
+          </div>
+        </section>
+      )}
 
       {/* Why use us */}
       <section className="max-w-6xl mx-auto px-4 py-14">
