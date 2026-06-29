@@ -15,3 +15,6 @@ Customer *Images/
 
 # Raw customer upload folders
 Customer */
+
+# Local working notes / session handoff (keep private, do not publish)
+CLAUDE.md
