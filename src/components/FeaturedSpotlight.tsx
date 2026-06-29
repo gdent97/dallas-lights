@@ -44,7 +44,7 @@ export default function FeaturedSpotlight({
             alt={`${listing.name} landscape lighting project`}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+            className="object-cover object-[50%_70%] group-hover:scale-[1.03] transition-transform duration-300"
             priority
           />
         </Link>
