@@ -428,16 +428,32 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
     id: '23',
     slug: 'landmark-design-co',
     name: 'Landmark Design Co.',
-    tier: 'free',
+    tier: 'featured',
     category: ['outdoor', 'residential'],
-    // No public phone number listed on their site — contact via website
+    phone: '(469) 994-8559',
     website: 'https://landmarkdesignco.com/dallas-outdoor-lighting/',
     city: 'Dallas',
     state: 'TX',
-    description: 'Custom landscape lighting design, installation, and maintenance for upscale DFW homes, plus holiday lighting.',
-    services: ['Landscape Lighting Design', 'Landscape Lighting Installation', 'Lighting Maintenance', 'Holiday Lighting'],
-    areasServed: ['Highland Park', 'University Park', 'Preston Hollow', 'Dallas', 'Frisco', 'Westlake', 'Southlake', 'Plano', 'Prosper', 'Flower Mound'],
-    featured: false,
+    description: "Luxury landscape lighting for Dallas–Fort Worth's finest homes.",
+    longDescription: `Landmark Design Co. specializes in the design, installation, and maintenance of custom architectural and landscape lighting for luxury homes throughout Dallas–Fort Worth. Every lighting system is thoughtfully designed to enhance the property's architecture, mature trees, outdoor living spaces, pools, and landscape with elegant, warm illumination that is both timeless and refined.
+
+For more than 15 years, we have partnered with discerning homeowners, custom home builders, landscape architects, and designers to create sophisticated nighttime environments using premium brass fixtures, expert installation, and proven lighting techniques that eliminate glare while highlighting each property's unique character.
+
+From Preston Hollow and Highland Park to Westlake, Southlake, Frisco, Prosper, Lucas, Fairview and beyond, Landmark Design Co. is committed to delivering exceptional craftsmanship, lasting performance, and a level of service that reflects the quality of the homes we illuminate.`,
+    services: ['Architectural Lighting', 'Landscape Lighting Design', 'Landscape Lighting Installation', 'Tree Lighting', 'Pool & Outdoor Living Lighting', 'Premium Brass Fixtures', 'Lighting Maintenance'],
+    areasServed: ['Dallas', 'Preston Hollow', 'Highland Park', 'University Park', 'Westlake', 'Southlake', 'Frisco', 'Prosper', 'Plano', 'Lucas', 'Fairview'],
+    yearsInBusiness: 15,
+    photos: [
+      '/companies/landmark-design-co/1.jpg',
+      '/companies/landmark-design-co/2.jpg',
+      '/companies/landmark-design-co/3.jpg',
+      '/companies/landmark-design-co/4.jpg',
+      '/companies/landmark-design-co/5.jpg',
+      '/companies/landmark-design-co/6.jpg',
+      '/companies/landmark-design-co/7.jpg',
+      '/companies/landmark-design-co/8.jpg',
+    ],
+    featured: true,
   },
 ]
 

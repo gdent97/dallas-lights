@@ -22,8 +22,8 @@ const SCHEMA = {
 }
 
 export default function HomePage() {
-  const featuredPartner = getFeaturedListings()[0] ?? null
-  // Show the rest in the grid (the featured partner gets its own big spotlight above).
+  const featuredPartners = getFeaturedListings()
+  // Show the rest in the grid (featured partners get their own big spotlights above).
   const spotlight = getAllListings()
     .filter((l) => !(l.featured || l.tier === 'featured'))
     .slice(0, 6)
@@ -60,7 +60,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {featuredPartner && <FeaturedSpotlight listing={featuredPartner} />}
+      {featuredPartners.map((l) => <FeaturedSpotlight key={l.id} listing={l} />)}
 
       {/* Why use us */}
       <section className="max-w-6xl mx-auto px-4 py-14">

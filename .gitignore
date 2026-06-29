@@ -12,3 +12,6 @@ build/
 
 # Raw customer image uploads (staging — processed copies live in public/)
 Customer *Images/
+
+# Raw customer upload folders
+Customer */
