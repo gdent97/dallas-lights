@@ -12,30 +12,30 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-            <Image src="/brand/logo.png" alt="Dallas Lights logo" width={36} height={36} className="rounded-lg" priority />
-            <span className="font-bold text-xl text-gray-900">
+          <Link href="/" className="flex items-center gap-2 shrink-0" onClick={() => setOpen(false)}>
+            <Image src="/brand/logo.png" alt="Dallas Lights logo" width={36} height={36} className="rounded-lg shrink-0" priority />
+            <span className="font-bold text-xl text-gray-900 whitespace-nowrap">
               Dallas<span className="text-brand-500">Lights</span>.com
             </span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+          <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-gray-600">
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/${cat.slug}`}
-                className="hover:text-brand-600 transition-colors"
+                className="whitespace-nowrap hover:text-brand-600 transition-colors"
               >
                 {cat.title}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/submit"
-              className="hidden sm:inline-block bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+              className="hidden sm:inline-block bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               Add Your Business
             </Link>
@@ -46,7 +46,7 @@ export default function Header() {
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="md:hidden p-2 -mr-2 text-gray-700"
+              className="lg:hidden p-2 -mr-2 text-gray-700"
             >
               {open ? (
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -64,7 +64,7 @@ export default function Header() {
 
       {/* Mobile menu panel */}
       {open && (
-        <nav className="md:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
+        <nav className="lg:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.slug}
