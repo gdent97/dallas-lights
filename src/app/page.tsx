@@ -22,7 +22,10 @@ const SCHEMA = {
 }
 
 export default function HomePage() {
-  const featuredPartners = getFeaturedListings()
+  // Landmark Design Co. listed first on the homepage.
+  const featuredPartners = [...getFeaturedListings()].sort((a, b) =>
+    a.slug === 'landmark-design-co' ? -1 : b.slug === 'landmark-design-co' ? 1 : 0,
+  )
   // Show the rest in the grid (featured partners get their own big spotlights above).
   const spotlight = getAllListings()
     .filter((l) => !(l.featured || l.tier === 'featured'))
