@@ -429,7 +429,7 @@ Serving Fort Worth, Dallas, and communities across the metroplex, the team focus
     slug: 'landmark-design-co',
     name: 'Landmark Design Co.',
     tier: 'featured',
-    category: ['outdoor', 'residential'],
+    category: ['outdoor', 'residential', 'holiday'],
     phone: '(469) 994-8559',
     website: 'https://landmarkdesignco.com/dallas-outdoor-lighting/',
     logo: '/companies/landmark-design-co/logo.png',
