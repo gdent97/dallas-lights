@@ -11,6 +11,7 @@ export default function Header() {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
+        {/* Top row: logo + CTA/hamburger */}
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 shrink-0" onClick={() => setOpen(false)}>
             <Image src="/brand/logo.png" alt="Dallas Lights logo" width={36} height={36} className="rounded-lg shrink-0" priority />
@@ -18,19 +19,6 @@ export default function Header() {
               Dallas<span className="text-brand-500">Lights</span>.com
             </span>
           </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-gray-600">
-            {CATEGORIES.map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/${cat.slug}`}
-                className="whitespace-nowrap hover:text-brand-600 transition-colors"
-              >
-                {cat.title}
-              </Link>
-            ))}
-          </nav>
 
           <div className="flex items-center gap-2 shrink-0">
             <Link
@@ -60,6 +48,19 @@ export default function Header() {
             </button>
           </div>
         </div>
+
+        {/* Second row: category nav, full width of its own — gives every link room to breathe */}
+        <nav className="hidden lg:flex items-center justify-center gap-8 text-sm font-medium text-gray-600 border-t border-gray-100 py-3">
+          {CATEGORIES.map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/${cat.slug}`}
+              className="whitespace-nowrap hover:text-brand-600 transition-colors"
+            >
+              {cat.title}
+            </Link>
+          ))}
+        </nav>
       </div>
 
       {/* Mobile menu panel */}
