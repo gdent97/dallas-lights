@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { CATEGORIES } from '@/lib/categories'
 
 export default function Footer() {
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl">💡</span>
+              <Image src="/brand/logo.png" alt="Dallas Lights logo" width={28} height={28} className="rounded-lg" />
               <span className="font-bold text-white text-lg">
                 Dallas<span className="text-brand-400">Lights</span>.com
               </span>

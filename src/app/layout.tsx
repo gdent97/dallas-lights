@@ -25,9 +25,11 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://dallaslights.com',
     siteName: 'DallasLights.com',
+    images: ['/brand/og-image.png'],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
+    images: ['/brand/og-image.png'],
   },
   alternates: {
     canonical: 'https://dallaslights.com',

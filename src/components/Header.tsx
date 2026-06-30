@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { CATEGORIES } from '@/lib/categories'
 
 export default function Header() {
@@ -12,7 +13,7 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-            <span className="text-2xl">💡</span>
+            <Image src="/brand/logo.png" alt="Dallas Lights logo" width={36} height={36} className="rounded-lg" priority />
             <span className="font-bold text-xl text-gray-900">
               Dallas<span className="text-brand-500">Lights</span>.com
             </span>
