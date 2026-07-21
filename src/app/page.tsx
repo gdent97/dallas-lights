@@ -10,14 +10,14 @@ import { GUIDES } from '@/lib/guides'
 export const metadata: Metadata = {
   title: 'Dallas Lights — Find Lighting Companies in Dallas, TX',
   description: 'The most complete directory of lighting companies in Dallas, TX. Find residential, commercial, outdoor, and smart home lighting installers near you.',
-  alternates: { canonical: 'https://dallaslights.com' },
+  alternates: { canonical: 'https://www.dallaslights.com' },
 }
 
 const SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'DallasLights.com',
-  url: 'https://dallaslights.com',
+  url: 'https://www.dallaslights.com',
   description: 'Directory of lighting companies in Dallas, TX',
 }
 

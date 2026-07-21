@@ -4,7 +4,7 @@ import { LISTINGS } from '@/lib/listings'
 import { getCityCategoryCombos } from '@/lib/cities'
 import { GUIDES } from '@/lib/guides'
 
-const BASE = 'https://dallaslights.com'
+const BASE = 'https://www.dallaslights.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -12,6 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${BASE}/submit`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE}/advertise`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${BASE}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
   ]
 
   const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({

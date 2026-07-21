@@ -5,7 +5,7 @@ import { GUIDES } from '@/lib/guides'
 export const metadata: Metadata = {
   title: 'DFW Lighting Guides & Resources',
   description: 'Local guides to lighting in Dallas–Fort Worth — where to see Christmas lights, what installation costs, and how to pick the right company.',
-  alternates: { canonical: 'https://dallaslights.com/guides' },
+  alternates: { canonical: 'https://www.dallaslights.com/guides' },
 }
 
 export default function GuidesIndex() {

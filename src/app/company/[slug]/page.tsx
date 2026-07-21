@@ -23,7 +23,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `https://dallaslights.com/company/${listing.slug}` },
+    alternates: { canonical: `https://www.dallaslights.com/company/${listing.slug}` },
     openGraph: { title, description },
   }
 }
@@ -37,9 +37,13 @@ export default function CompanyPage({ params }: Props) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
+    '@id': `https://www.dallaslights.com/company/${listing.slug}`,
     name: listing.name,
     description: listing.description,
     telephone: listing.phone,
+    ...(listing.photos?.length && {
+      image: listing.photos.map((p) => `https://www.dallaslights.com${p}`),
+    }),
     ...(listing.email && { email: listing.email }),
     ...(listing.website && { url: listing.website }),
     address: {
@@ -61,6 +65,18 @@ export default function CompanyPage({ params }: Props) {
     }),
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.dallaslights.com' },
+      ...(primaryCat
+        ? [{ '@type': 'ListItem', position: 2, name: primaryCat.title, item: `https://www.dallaslights.com/${primaryCat.slug}` }]
+        : []),
+      { '@type': 'ListItem', position: primaryCat ? 3 : 2, name: listing.name, item: `https://www.dallaslights.com/company/${listing.slug}` },
+    ],
+  }
+
   const stars = listing.rating ? Math.round(listing.rating) : 0
 
   return (
@@ -68,6 +84,10 @@ export default function CompanyPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       {/* Breadcrumb */}

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   // This is a paid-ad landing page — keep it out of the search index so it
   // doesn't compete with the organic /outdoor/fort-worth page.
   robots: { index: false, follow: true },
-  alternates: { canonical: 'https://dallaslights.com/fort-worth-landscape-lighting' },
+  alternates: { canonical: 'https://www.dallaslights.com/fort-worth-landscape-lighting' },
 }
 
 const BENEFITS = [

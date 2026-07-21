@@ -7,7 +7,7 @@ const guide = getGuideBySlug('best-christmas-lights-dfw')!
 export const metadata: Metadata = {
   title: `${guide.title} (Local Guide)`,
   description: guide.description,
-  alternates: { canonical: 'https://dallaslights.com/guides/best-christmas-lights-dfw' },
+  alternates: { canonical: 'https://www.dallaslights.com/guides/best-christmas-lights-dfw' },
   openGraph: { title: guide.title, description: guide.description, type: 'article' },
 }
 
@@ -63,16 +63,16 @@ export default function GuidePage() {
     description: guide.description,
     author: { '@type': 'Organization', name: 'DallasLights.com' },
     publisher: { '@type': 'Organization', name: 'DallasLights.com' },
-    mainEntityOfPage: 'https://dallaslights.com/guides/best-christmas-lights-dfw',
+    mainEntityOfPage: 'https://www.dallaslights.com/guides/best-christmas-lights-dfw',
   }
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dallaslights.com' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://dallaslights.com/guides' },
-      { '@type': 'ListItem', position: 3, name: 'Best Christmas Lights in DFW', item: 'https://dallaslights.com/guides/best-christmas-lights-dfw' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.dallaslights.com' },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.dallaslights.com/guides' },
+      { '@type': 'ListItem', position: 3, name: 'Best Christmas Lights in DFW', item: 'https://www.dallaslights.com/guides/best-christmas-lights-dfw' },
     ],
   }
 

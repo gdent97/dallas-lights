@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://dallaslights.com'),
+  metadataBase: new URL('https://www.dallaslights.com'),
   title: {
     default: 'Dallas Lights — Lighting Companies in Dallas, TX',
     template: '%s | DallasLights.com',
@@ -23,16 +23,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://dallaslights.com',
+    url: 'https://www.dallaslights.com',
     siteName: 'DallasLights.com',
-    images: ['/brand/og-image.png'],
+    images: [{ url: '/brand/og-image-wide.png', width: 1200, height: 630 }],
   },
   twitter: {
-    card: 'summary',
-    images: ['/brand/og-image.png'],
+    card: 'summary_large_image',
+    images: ['/brand/og-image-wide.png'],
   },
   alternates: {
-    canonical: 'https://dallaslights.com',
+    canonical: 'https://www.dallaslights.com',
   },
 }
 

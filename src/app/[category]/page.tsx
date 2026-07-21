@@ -22,7 +22,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: `${cat.title} in Dallas, TX`,
     description: cat.metaDescription,
-    alternates: { canonical: `https://dallaslights.com/${cat.slug}` },
+    alternates: { canonical: `https://www.dallaslights.com/${cat.slug}` },
     openGraph: {
       title: `${cat.title} in Dallas, TX — DallasLights.com`,
       description: cat.metaDescription,
@@ -46,12 +46,12 @@ export default function CategoryPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: cat.heading,
-    url: `https://dallaslights.com/${cat.slug}`,
+    url: `https://www.dallaslights.com/${cat.slug}`,
     numberOfItems: listings.length,
     itemListElement: listings.map((l, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://dallaslights.com/company/${l.slug}`,
+      url: `https://www.dallaslights.com/company/${l.slug}`,
       name: l.name,
     })),
   }

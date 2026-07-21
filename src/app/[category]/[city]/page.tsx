@@ -25,7 +25,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `https://dallaslights.com/${cat.slug}/${city.slug}` },
+    alternates: { canonical: `https://www.dallaslights.com/${cat.slug}/${city.slug}` },
     openGraph: { title: `${title} — DallasLights.com`, description },
   }
 }
@@ -63,9 +63,9 @@ export default function CityCategoryPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://dallaslights.com' },
-      { '@type': 'ListItem', position: 2, name: cat.title, item: `https://dallaslights.com/${cat.slug}` },
-      { '@type': 'ListItem', position: 3, name: city.name, item: `https://dallaslights.com/${cat.slug}/${city.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.dallaslights.com' },
+      { '@type': 'ListItem', position: 2, name: cat.title, item: `https://www.dallaslights.com/${cat.slug}` },
+      { '@type': 'ListItem', position: 3, name: city.name, item: `https://www.dallaslights.com/${cat.slug}/${city.slug}` },
     ],
   }
 
@@ -79,10 +79,25 @@ export default function CityCategoryPage({ params }: Props) {
     })),
   }
 
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${cat.title} in ${city.name}, TX`,
+    url: `https://www.dallaslights.com/${cat.slug}/${city.slug}`,
+    numberOfItems: listings.length,
+    itemListElement: listings.map((l, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://www.dallaslights.com/company/${l.slug}`,
+      name: l.name,
+    })),
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 pt-6 text-sm text-gray-500">
