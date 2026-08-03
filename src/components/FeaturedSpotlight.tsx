@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Listing } from '@/lib/types'
+import TrackedContactLink from './TrackedContactLink'
 
 /**
  * Prominent spotlight for a Featured partner.
@@ -99,12 +100,14 @@ export default function FeaturedSpotlight({
             View Profile →
           </Link>
           {listing.phone && (
-            <a
+            <TrackedContactLink
+              event="click_phone"
               href={`tel:${listing.phone.replace(/[^0-9+]/g, '')}`}
+              params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
               className="border border-gray-300 hover:bg-gray-50 text-gray-800 font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors"
             >
               📞 {listing.phone}
-            </a>
+            </TrackedContactLink>
           )}
         </div>
       </div>

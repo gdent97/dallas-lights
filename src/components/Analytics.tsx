@@ -1,4 +1,6 @@
 import Script from 'next/script'
+import { Suspense } from 'react'
+import PageViewTracker from './PageViewTracker'
 
 /**
  * Privacy-friendly analytics, controlled entirely by environment variables.
@@ -31,6 +33,10 @@ export default function Analytics() {
               gtag('config', '${gaId}');
             `}
           </Script>
+          {/* gtag('config') counts the initial load; this covers SPA navigations */}
+          <Suspense fallback={null}>
+            <PageViewTracker />
+          </Suspense>
         </>
       )}
 

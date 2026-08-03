@@ -1,18 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, trackConversion } from '@/lib/forms'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
+import { trackEvent } from '@/lib/analytics'
 
 interface Props {
   companyName: string
   companyId: string
+  listingTier?: string
+  city?: string
+  serviceCategory?: string
 }
 
-export default function LeadForm({ companyName, companyId }: Props) {
+export default function LeadForm({ companyName, companyId, listingTier, city, serviceCategory }: Props) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'sending') return
     setStatus('sending')
 
     const formData = new FormData(e.currentTarget)
@@ -31,7 +36,19 @@ export default function LeadForm({ companyName, companyId }: Props) {
       const data = await res.json()
       if (!data.success) throw new Error()
       setStatus('sent')
-      trackConversion('generate_lead', { lead_type: 'company_quote', company: companyName })
+      // Fired only after Web3Forms confirms success; no visitor data in params.
+      trackEvent(
+        'generate_lead',
+        {
+          lead_type: 'company_quote',
+          company_id: companyId,
+          company_name: companyName,
+          listing_tier: listingTier,
+          city,
+          service_category: serviceCategory,
+        },
+        `company_quote:${companyId}`
+      )
     } catch {
       setStatus('error')
     }
