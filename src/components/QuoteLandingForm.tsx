@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, trackConversion } from '@/lib/forms'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
+import { trackEvent } from '@/lib/analytics'
 
 interface Props {
   /** e.g. "Fort Worth Landscape Lighting" — used in the email subject + tracking label */
@@ -13,6 +14,7 @@ export default function QuoteLandingForm({ leadType }: Props) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'submitting') return
     setStatus('submitting')
 
     const formData = new FormData(e.currentTarget)
@@ -30,7 +32,8 @@ export default function QuoteLandingForm({ leadType }: Props) {
       const data = await res.json()
       if (data.success) {
         setStatus('done')
-        trackConversion('generate_lead', { lead_type: leadType })
+        // Fired only after Web3Forms confirms success; no visitor data in params.
+        trackEvent('generate_lead', { lead_type: leadType }, `landing:${leadType}`)
       } else {
         setStatus('error')
       }

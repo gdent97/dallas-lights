@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import LeadForm from '@/components/LeadForm'
 import PhotoGallery from '@/components/PhotoGallery'
+import TrackedContactLink from '@/components/TrackedContactLink'
 import { getListingBySlug, LISTINGS } from '@/lib/listings'
 import { getCategoryMeta } from '@/lib/categories'
 
@@ -241,25 +242,47 @@ export default function CompanyPage({ params }: Props) {
           {/* Sidebar */}
           <div className="space-y-4">
             {listing.tier !== 'free' && (
-              <LeadForm companyName={listing.name} companyId={listing.id} />
+              <LeadForm
+                companyName={listing.name}
+                companyId={listing.id}
+                listingTier={listing.tier}
+                city={listing.city}
+                serviceCategory={listing.category[0]}
+              />
             )}
 
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
               <h3 className="font-bold text-gray-900">Contact</h3>
               {listing.phone && (
-                <a href={`tel:${listing.phone.replace(/[^0-9+]/g, '')}`} className="flex items-center gap-2 text-brand-700 font-semibold hover:text-brand-800">
+                <TrackedContactLink
+                  event="click_phone"
+                  href={`tel:${listing.phone.replace(/[^0-9+]/g, '')}`}
+                  params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
+                  className="flex items-center gap-2 text-brand-700 font-semibold hover:text-brand-800"
+                >
                   <span>📞</span> {listing.phone}
-                </a>
+                </TrackedContactLink>
               )}
               {listing.email && (
-                <a href={`mailto:${listing.email}`} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm">
+                <TrackedContactLink
+                  event="click_email"
+                  href={`mailto:${listing.email}`}
+                  params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
+                >
                   <span>✉️</span> {listing.email}
-                </a>
+                </TrackedContactLink>
               )}
               {listing.website && (
-                <a href={listing.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm">
+                <TrackedContactLink
+                  event="click_company_website"
+                  href={listing.website}
+                  newTab
+                  params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
+                >
                   <span>🌐</span> Visit Website
-                </a>
+                </TrackedContactLink>
               )}
             </div>
 

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, trackConversion } from '@/lib/forms'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
+import { trackEvent } from '@/lib/analytics'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -11,6 +12,7 @@ export default function ListingSubmitForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'submitting') return
     setStatus('submitting')
     setError('')
 
@@ -28,7 +30,7 @@ export default function ListingSubmitForm() {
       const data = await res.json()
       if (data.success) {
         setStatus('success')
-        trackConversion('submit_listing', { lead_type: 'free_listing' })
+        trackEvent('submit_listing', { lead_type: 'free_listing' }, 'free_listing')
       } else {
         setStatus('error')
         setError(data.message || 'Something went wrong. Please try again.')

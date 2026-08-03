@@ -1,13 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, trackConversion } from '@/lib/forms'
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT } from '@/lib/forms'
+import { trackEvent } from '@/lib/analytics'
 
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'sending') return
     setStatus('sending')
 
     const formData = new FormData(e.currentTarget)
@@ -24,7 +26,9 @@ export default function ContactForm() {
       const data = await res.json()
       if (!data.success) throw new Error()
       setStatus('sent')
-      trackConversion('generate_lead', { lead_type: 'contact_form' })
+      // General inquiries are not consumer leads — tracked separately so
+      // generate_lead (and any Google Ads import of it) stays clean.
+      trackEvent('contact_form_submit', { lead_type: 'contact_form' }, 'contact_form')
     } catch {
       setStatus('error')
     }

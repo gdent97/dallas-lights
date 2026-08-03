@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Listing } from '@/lib/types'
+import TrackedContactLink from './TrackedContactLink'
 
 interface Props {
   listing: Listing
@@ -73,12 +74,14 @@ export default function ListingCard({ listing }: Props) {
 
       <div className="mt-4 pt-3 flex items-center justify-between gap-2">
         {listing.phone ? (
-          <a
+          <TrackedContactLink
+            event="click_phone"
             href={`tel:${listing.phone.replace(/[^0-9+]/g, '')}`}
+            params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
             className="text-sm font-semibold text-brand-700 hover:text-brand-800"
           >
             {listing.phone}
-          </a>
+          </TrackedContactLink>
         ) : (
           <span className="text-sm text-gray-400">See website</span>
         )}
