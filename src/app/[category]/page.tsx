@@ -73,7 +73,13 @@ export default function CategoryPage({ params }: Props) {
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-4 py-10">
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">{cat.heading}</h1>
-        <p className="text-gray-600 max-w-2xl">{cat.description}</p>
+        <p className="text-gray-600 max-w-2xl mb-5">{cat.description}</p>
+        <Link
+          href={`/get-quotes?service=${cat.slug}`}
+          className="inline-block bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
+        >
+          Request Free Quotes
+        </Link>
       </section>
 
       {/* Featured partner spotlight(s) — two+ render side by side, equal tier. */}

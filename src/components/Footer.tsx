@@ -15,8 +15,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              The most complete directory of lighting companies, designers, and electricians
-              serving Dallas–Fort Worth.
+              A focused local directory of lighting companies, designers, and electricians serving Dallas–Fort Worth.
             </p>
           </div>
 
@@ -40,6 +39,7 @@ export default function Footer() {
               <li><Link href="/holiday/fort-worth" className="hover:text-white transition-colors">Christmas Lights in Fort Worth</Link></li>
               <li><Link href="/outdoor/dallas" className="hover:text-white transition-colors">Landscape Lighting in Dallas</Link></li>
               <li><Link href="/outdoor/fort-worth" className="hover:text-white transition-colors">Landscape Lighting in Fort Worth</Link></li>
+              <li><Link href="/get-quotes" className="hover:text-white transition-colors">Request Free Quotes</Link></li>
               <li><Link href="/guides" className="hover:text-white transition-colors">DFW Lighting Guides</Link></li>
             </ul>
           </div>

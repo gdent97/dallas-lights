@@ -3,7 +3,7 @@ import QuoteLandingForm from '@/components/QuoteLandingForm'
 
 export const metadata: Metadata = {
   title: 'Fort Worth Landscape Lighting — Free Quotes from Local Pros',
-  description: 'Get free quotes from trusted landscape lighting companies in Fort Worth, TX. Compare local pros and get your project started.',
+  description: 'Request free quotes from landscape lighting companies serving Fort Worth, TX. Share your project details and get connected with a local pro.',
   // This is a paid-ad landing page — keep it out of the search index so it
   // doesn't compete with the organic /outdoor/fort-worth page.
   robots: { index: false, follow: true },
@@ -27,7 +27,7 @@ export default function FortWorthLandscapeLightingLanding() {
             Landscape Lighting in Fort Worth, TX
           </h1>
           <p className="text-lg text-gray-300 mb-6">
-            Get free quotes from trusted local landscape lighting companies — and make your yard look incredible after dark.
+            Request free quotes from local landscape lighting companies — and make your yard look incredible after dark.
           </p>
           <ul className="space-y-3">
             {BENEFITS.map((b) => (

@@ -85,7 +85,7 @@ export default function AdvertisePage() {
           >
             {tier.highlight && (
               <span className="self-start text-xs font-bold uppercase tracking-wide bg-brand-100 text-brand-800 px-2 py-0.5 rounded-full mb-3">
-                Most popular
+                Recommended
               </span>
             )}
             <h2 className="text-xl font-bold text-gray-900">{tier.name}</h2>
@@ -113,6 +113,21 @@ export default function AdvertisePage() {
         ))}
       </div>
 
+      <div className="max-w-3xl mx-auto mb-12 bg-gray-900 text-white rounded-2xl p-6 md:p-8">
+        <h2 className="text-xl font-bold mb-2">See a Featured placement in action</h2>
+        <p className="text-sm text-gray-300 mb-5">
+          These live partner profiles show the photos, service details, quote form, and prominent placement included with Featured.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Link href="/company/landmark-design-co" className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2.5 rounded-lg text-sm text-center transition-colors">
+            View Landmark Design Co.
+          </Link>
+          <Link href="/company/nightsculptures" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-lg text-sm text-center transition-colors">
+            View NightSculptures
+          </Link>
+        </div>
+      </div>
+
       <div className="max-w-3xl mx-auto">
         <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Why list here?</h2>
         <div className="space-y-4 text-gray-700 leading-relaxed">
@@ -131,6 +146,23 @@ export default function AdvertisePage() {
             <strong>No contracts.</strong> Month to month. If it&apos;s not producing for you, cancel
             anytime.
           </p>
+        </div>
+
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">What happens after you apply</h2>
+          <div className="grid sm:grid-cols-3 gap-4 text-center">
+            {[
+              ['1', 'Send your details', 'Choose a plan and tell us about your business.'],
+              ['2', 'We verify the listing', 'We confirm the business information and placement fit.'],
+              ['3', 'Your profile goes live', 'We collect the approved copy and images, then publish the upgraded profile.'],
+            ].map(([number, title, body]) => (
+              <div key={number} className="bg-white border border-gray-200 rounded-xl p-5">
+                <div className="w-8 h-8 rounded-full bg-brand-100 text-brand-800 font-bold flex items-center justify-center mx-auto mb-3">{number}</div>
+                <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
+                <p className="text-sm text-gray-600">{body}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="bg-brand-50 border border-brand-200 rounded-xl p-6 mt-10 text-center">

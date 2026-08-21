@@ -8,6 +8,7 @@ export default function NewsletterSignup() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'submitting') return
     setStatus('submitting')
     const formData = new FormData(e.currentTarget)
     formData.append('access_key', WEB3FORMS_KEY)
@@ -40,6 +41,7 @@ export default function NewsletterSignup() {
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
+              aria-label="Email address for the DFW lighting newsletter"
               name="email"
               type="email"
               required
