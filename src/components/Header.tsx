@@ -22,10 +22,16 @@ export default function Header() {
 
           <div className="flex items-center gap-2 shrink-0">
             <Link
-              href="/submit"
+              href="/advertise"
+              className="hidden md:inline-block text-gray-600 hover:text-gray-900 text-sm font-medium px-2 py-2 transition-colors whitespace-nowrap"
+            >
+              For Businesses
+            </Link>
+            <Link
+              href="/get-quotes"
               className="hidden sm:inline-block bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
-              Add Your Business
+              Get Free Quotes
             </Link>
 
             {/* Mobile hamburger */}
@@ -33,6 +39,7 @@ export default function Header() {
               type="button"
               aria-label="Toggle menu"
               aria-expanded={open}
+              aria-controls="mobile-navigation"
               onClick={() => setOpen((v) => !v)}
               className="lg:hidden p-2 -mr-2 text-gray-700"
             >
@@ -65,7 +72,7 @@ export default function Header() {
 
       {/* Mobile menu panel */}
       {open && (
-        <nav className="lg:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
+        <nav id="mobile-navigation" className="lg:hidden border-t border-gray-200 bg-white px-4 py-3 space-y-1">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.slug}
@@ -77,11 +84,18 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="/submit"
+            href="/get-quotes"
             onClick={() => setOpen(false)}
             className="block mt-2 bg-brand-500 hover:bg-brand-600 text-white text-center font-semibold px-4 py-2.5 rounded-lg"
           >
-            Add Your Business
+            Get Free Quotes
+          </Link>
+          <Link
+            href="/advertise"
+            onClick={() => setOpen(false)}
+            className="block text-center py-2.5 text-gray-700 font-medium hover:text-brand-600"
+          >
+            For Lighting Businesses
           </Link>
         </nav>
       )}

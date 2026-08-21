@@ -47,19 +47,24 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-3 bg-white border border-gray-200 rounded-xl p-6">
       <input
+        aria-label="Your name"
         name="name"
+        autoComplete="name"
         required
         placeholder="Your name"
         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
       />
       <input
+        aria-label="Email address"
         name="email"
         type="email"
+        autoComplete="email"
         required
         placeholder="Email address"
         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
       />
       <textarea
+        aria-label="Message"
         name="message"
         rows={5}
         required

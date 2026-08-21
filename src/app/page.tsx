@@ -9,7 +9,7 @@ import { GUIDES } from '@/lib/guides'
 
 export const metadata: Metadata = {
   title: 'Dallas Lights — Find Lighting Companies in Dallas, TX',
-  description: 'The most complete directory of lighting companies in Dallas, TX. Find residential, commercial, outdoor, and smart home lighting installers near you.',
+  description: 'Compare lighting companies serving Dallas–Fort Worth. Browse residential, commercial, outdoor, holiday, and smart-home lighting services or request a free quote.',
   alternates: { canonical: 'https://www.dallaslights.com' },
 }
 
@@ -46,9 +46,17 @@ export default function HomePage() {
             Find Lighting Companies<br />in Dallas, TX
           </h1>
           <p className="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
-            Browse Dallas's most complete directory of residential, commercial, and outdoor
-            lighting professionals. Free quotes from local experts.
+            Compare local residential, commercial, landscape, smart-home, and holiday lighting
+            companies—or tell us what you need and request a free quote.
           </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mb-8">
+            <Link href="/get-quotes" className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-7 py-3 rounded-lg transition-colors">
+              Get Free Quotes
+            </Link>
+            <a href="#companies" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-7 py-3 rounded-lg transition-colors">
+              Browse Companies
+            </a>
+          </div>
           <div className="flex flex-wrap justify-center gap-3">
             {CATEGORIES.map((cat) => (
               <Link
@@ -90,7 +98,7 @@ export default function HomePage() {
 
       {/* Listings spotlight */}
       {spotlight.length > 0 && (
-        <section className="max-w-6xl mx-auto px-4 pb-14">
+        <section id="companies" className="max-w-6xl mx-auto px-4 pb-14 scroll-mt-36">
           <div className="flex items-end justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Dallas Lighting Companies</h2>
             <span className="text-sm text-gray-500">{totalCount} listed</span>

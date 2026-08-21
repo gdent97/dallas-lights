@@ -12,7 +12,7 @@ export default function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Privacy Policy</h1>
-      <p className="text-sm text-gray-500 mb-8">Last updated: July 21, 2026</p>
+      <p className="text-sm text-gray-500 mb-8">Last updated: August 21, 2026</p>
 
       <div className="space-y-6 text-gray-700 leading-relaxed text-[15px]">
         <section>
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             When you submit a form on this site — a quote request, a contact message, a business
             listing, or a newsletter signup — we collect the information you enter (such as your
             name, phone number, email address, and message). Quote requests are forwarded to us and
-            to the company you asked to be connected with, so they can respond to your inquiry.
+            may be shared with a relevant lighting company so it can respond to your inquiry.
             Business listing submissions are used to create or update the company&apos;s public listing.
           </p>
           <p className="mt-2">

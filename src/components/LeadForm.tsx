@@ -72,26 +72,37 @@ export default function LeadForm({ companyName, companyId, listingTier, city, se
       <form onSubmit={handleSubmit} className="space-y-3">
         <input type="hidden" name="companyId" value={companyId} />
 
+        <label htmlFor={`lead-name-${companyId}`} className="sr-only">Your name</label>
         <input
+          id={`lead-name-${companyId}`}
           name="name"
+          autoComplete="name"
           required
           placeholder="Your name"
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
         />
+        <label htmlFor={`lead-phone-${companyId}`} className="sr-only">Phone number</label>
         <input
+          id={`lead-phone-${companyId}`}
           name="phone"
           type="tel"
+          autoComplete="tel"
           required
           placeholder="Phone number"
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
         />
+        <label htmlFor={`lead-email-${companyId}`} className="sr-only">Email address</label>
         <input
+          id={`lead-email-${companyId}`}
           name="email"
           type="email"
+          autoComplete="email"
           placeholder="Email (optional)"
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
         />
+        <label htmlFor={`lead-message-${companyId}`} className="sr-only">Project description</label>
         <textarea
+          id={`lead-message-${companyId}`}
           name="message"
           rows={3}
           placeholder="Describe your project..."

@@ -39,6 +39,21 @@ export default function CityCategoryPage({ params }: Props) {
   if (listings.length < MIN_CITY_PAGE_LISTINGS) notFound()
 
   const otherCities = citiesForCategory(cat.slug).filter((c) => c.slug !== city.slug)
+  const serviceCounts = new Map<string, number>()
+  for (const listing of listings) {
+    for (const service of Array.from(new Set(listing.services))) {
+      serviceCounts.set(service, (serviceCounts.get(service) || 0) + 1)
+    }
+  }
+  const popularServices = Array.from(serviceCounts.entries())
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 8)
+  const cityArticle = /^[aeiou]/i.test(city.name) ? 'an' : 'a'
+  const relatedGuide = cat.slug === 'holiday'
+    ? { href: '/guides/christmas-light-installation-cost-dallas', label: 'Read the DFW holiday lighting cost guide' }
+    : cat.slug === 'outdoor'
+      ? { href: '/guides/landscape-lighting-cost-dallas', label: 'Read the DFW landscape lighting cost guide' }
+      : undefined
 
   // Pull the featured partner (if any) into a prominent spotlight above the grid.
   const featuredHere = listings.find((l) => l.featured || l.tier === 'featured')
@@ -51,10 +66,10 @@ export default function CityCategoryPage({ params }: Props) {
     },
     {
       q: `Are these ${city.name} lighting companies licensed and insured?`,
-      a: `Most professional lighting companies in the Dallas–Fort Worth area carry licensing and insurance, but it varies by company and service. Always confirm directly with the company before hiring.`,
+      a: `Licensing and insurance requirements vary by company and by the work being performed. DallasLights.com does not independently verify every company's current status, so ask the company for the credentials relevant to your project before hiring.`,
     },
     {
-      q: `How do I get a quote from a ${city.name} lighting company?`,
+      q: `How do I get a quote from ${cityArticle} ${city.name} lighting company?`,
       a: `Open any company's profile to see their phone number and website, or send a quote request directly from a Premium listing. Most offer free estimates.`,
     },
   ]
@@ -113,9 +128,15 @@ export default function CityCategoryPage({ params }: Props) {
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
           {cat.title} in {city.name}, TX
         </h1>
-        <p className="text-gray-600 max-w-2xl">
+        <p className="text-gray-600 max-w-2xl mb-5">
           {listings.length} {cat.title.toLowerCase()} {listings.length === 1 ? 'company' : 'companies'} serving {city.name} and the surrounding Dallas–Fort Worth area. Compare local pros below, see what they offer, and reach out for a free quote.
         </p>
+        <Link
+          href={`/get-quotes?service=${cat.slug}&city=${city.slug}`}
+          className="inline-block bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
+        >
+          Request Free Quotes in {city.name}
+        </Link>
       </section>
 
       {/* Featured partner spotlight (prominent above the list) */}
@@ -126,6 +147,38 @@ export default function CityCategoryPage({ params }: Props) {
         <p className="text-sm text-gray-500 mb-5">{listings.length} companies serving {city.name}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {rest.map((l) => <ListingCard key={l.id} listing={l} />)}
+        </div>
+      </section>
+
+      {/* Data-driven comparison help adds useful context beyond a list of names. */}
+      <section className="max-w-6xl mx-auto px-4 pb-12">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8 grid md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Services offered around {city.name}</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              These are the most frequently listed services among the companies above. Confirm availability and project fit directly with each company.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {popularServices.map(([service, count]) => (
+                <span key={service} className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full">
+                  {service} <span className="text-gray-400">({count})</span>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">How to compare lighting companies</h2>
+            <ol className="space-y-3 text-sm text-gray-600 list-decimal pl-5">
+              <li>Ask for a written scope covering fixtures, installation, controls, warranty, and ongoing maintenance.</li>
+              <li>Confirm licensing, insurance, references, and who will perform the work when those matter for your project.</li>
+              <li>Compare two or three quotes on the same scope—not price alone.</li>
+            </ol>
+            {relatedGuide && (
+              <Link href={relatedGuide.href} className="inline-block mt-4 text-sm text-brand-700 font-semibold hover:text-brand-800">
+                {relatedGuide.label} →
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 
