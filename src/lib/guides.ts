@@ -7,6 +7,14 @@ export interface GuideMeta {
 
 export const GUIDES: GuideMeta[] = [
   {
+    slug: 'dfw-holiday-lighting-planner',
+    title: '2026 DFW Holiday Lighting Planner & Checklist',
+    description:
+      'Plan holiday lighting in Dallas–Fort Worth with a month-by-month timeline, interactive checklist, installer comparison questions, and practical safety guidance.',
+    excerpt:
+      'A free month-by-month planner and interactive checklist for booking, installing, maintaining, and taking down holiday lights in DFW.',
+  },
+  {
     slug: 'best-christmas-lights-dfw',
     title: 'Best Places to See Christmas Lights in Dallas–Fort Worth',
     description:

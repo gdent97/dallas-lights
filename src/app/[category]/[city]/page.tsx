@@ -49,11 +49,14 @@ export default function CityCategoryPage({ params }: Props) {
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 8)
   const cityArticle = /^[aeiou]/i.test(city.name) ? 'an' : 'a'
-  const relatedGuide = cat.slug === 'holiday'
-    ? { href: '/guides/christmas-light-installation-cost-dallas', label: 'Read the DFW holiday lighting cost guide' }
+  const relatedGuides = cat.slug === 'holiday'
+    ? [
+        { href: '/guides/dfw-holiday-lighting-planner', label: 'Use the 2026 DFW holiday lighting planner' },
+        { href: '/guides/christmas-light-installation-cost-dallas', label: 'Read the DFW holiday lighting cost guide' },
+      ]
     : cat.slug === 'outdoor'
-      ? { href: '/guides/landscape-lighting-cost-dallas', label: 'Read the DFW landscape lighting cost guide' }
-      : undefined
+      ? [{ href: '/guides/landscape-lighting-cost-dallas', label: 'Read the DFW landscape lighting cost guide' }]
+      : []
 
   // Pull the featured partner (if any) into a prominent spotlight above the grid.
   const featuredHere = listings.find((l) => l.featured || l.tier === 'featured')
@@ -173,10 +176,14 @@ export default function CityCategoryPage({ params }: Props) {
               <li>Confirm licensing, insurance, references, and who will perform the work when those matter for your project.</li>
               <li>Compare two or three quotes on the same scope—not price alone.</li>
             </ol>
-            {relatedGuide && (
-              <Link href={relatedGuide.href} className="inline-block mt-4 text-sm text-brand-700 font-semibold hover:text-brand-800">
-                {relatedGuide.label} →
-              </Link>
+            {relatedGuides.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {relatedGuides.map((relatedGuide) => (
+                  <Link key={relatedGuide.href} href={relatedGuide.href} className="block text-sm text-brand-700 font-semibold hover:text-brand-800">
+                    {relatedGuide.label} →
+                  </Link>
+                ))}
+              </div>
             )}
           </div>
         </div>
