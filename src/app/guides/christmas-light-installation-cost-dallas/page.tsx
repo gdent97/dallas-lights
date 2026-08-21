@@ -161,7 +161,10 @@ export default function GuidePage() {
             request quotes directly.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link href="/holiday" className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+            <Link href="/get-quotes?service=holiday" className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+              Request Free Quotes
+            </Link>
+            <Link href="/holiday" className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
               All DFW Holiday Light Installers
             </Link>
             <Link href="/holiday/dallas" className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
@@ -171,6 +174,9 @@ export default function GuidePage() {
               Installers in Fort Worth
             </Link>
           </div>
+          <Link href="/guides/dfw-holiday-lighting-planner" className="inline-block mt-4 text-sm text-brand-700 font-semibold hover:text-brand-800">
+            Use the 2026 DFW holiday lighting planner →
+          </Link>
         </section>
       </article>
     </>

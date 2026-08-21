@@ -82,6 +82,24 @@ export default function CategoryPage({ params }: Props) {
         </Link>
       </section>
 
+      {cat.slug === 'holiday' && (
+        <section className="max-w-6xl mx-auto px-4 pb-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-amber-800 mb-1">Plan before the seasonal rush</p>
+              <h2 className="text-xl font-bold text-gray-900">Use the free 2026 DFW holiday lighting checklist</h2>
+              <p className="text-sm text-gray-600 mt-1">See when to book, what to compare, and what to confirm before installation.</p>
+            </div>
+            <Link
+              href="/guides/dfw-holiday-lighting-planner"
+              className="shrink-0 text-center bg-gray-900 hover:bg-gray-800 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            >
+              Open the Planner
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* Featured partner spotlight(s) — two+ render side by side, equal tier. */}
       {featuredHere.length === 1 && <FeaturedSpotlight listing={featuredHere[0]} />}
       {featuredHere.length > 1 && (
