@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import { getGuideBySlug } from '@/lib/guides'
 
@@ -9,7 +10,13 @@ export const metadata: Metadata = {
   title: `${guide.title} (2026 Guide)`,
   description: guide.description,
   alternates: { canonical: PAGE_URL },
-  openGraph: { title: guide.title, description: guide.description, type: 'article' },
+  openGraph: {
+    url: PAGE_URL,
+    images: [SOCIAL_IMAGE],
+    title: guide.title,
+    description: guide.description,
+    type: 'article',
+  },
 }
 
 const FAQS = [

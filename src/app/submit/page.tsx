@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import ListingSubmitForm from '@/components/ListingSubmitForm'
 import { getListingBySlug } from '@/lib/listings'
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Add Your Lighting Business to DallasLights.com',
   description: 'List your Dallas–Fort Worth lighting company for free. Get found by local homeowners searching for lighting services across DFW.',
   alternates: { canonical: 'https://www.dallaslights.com/submit' },
+  openGraph: { url: 'https://www.dallaslights.com/submit', images: [SOCIAL_IMAGE] },
 }
 
 const TIERS = [

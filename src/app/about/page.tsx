@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import { CATEGORIES } from '@/lib/categories'
 import { getAllListings } from '@/lib/listings'
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description:
     'DallasLights.com is a local directory of lighting companies serving Dallas–Fort Worth. Learn how listings work, how companies are added, and how to get in touch.',
   alternates: { canonical: 'https://www.dallaslights.com/about' },
+  openGraph: { url: 'https://www.dallaslights.com/about', images: [SOCIAL_IMAGE] },
 }
 
 export default function AboutPage() {

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import { getGuideBySlug } from '@/lib/guides'
 
@@ -8,7 +9,13 @@ export const metadata: Metadata = {
   title: `${guide.title} (Local Guide)`,
   description: guide.description,
   alternates: { canonical: 'https://www.dallaslights.com/guides/best-christmas-lights-dfw' },
-  openGraph: { title: guide.title, description: guide.description, type: 'article' },
+  openGraph: {
+    url: 'https://www.dallaslights.com/guides/best-christmas-lights-dfw',
+    images: [SOCIAL_IMAGE],
+    title: guide.title,
+    description: guide.description,
+    type: 'article',
+  },
 }
 
 interface Spot {

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -19,13 +20,18 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: Props): Metadata {
   const listing = getListingBySlug(params.slug)
   if (!listing) return {}
-  const title = `${listing.name} — ${listing.city}, TX Lighting Company`
-  const description = `${listing.name} is a ${listing.city}, TX lighting company. ${listing.description}${listing.phone ? ` Call ${listing.phone} for a free quote.` : ''}`
+  const title = `${listing.name} | ${listing.city}, TX`
+  const description = `${listing.name} is a ${listing.city}, TX lighting company. ${listing.description}`
   return {
     title,
     description,
     alternates: { canonical: `https://www.dallaslights.com/company/${listing.slug}` },
-    openGraph: { title, description },
+    openGraph: {
+      url: `https://www.dallaslights.com/company/${listing.slug}`,
+      images: [SOCIAL_IMAGE],
+      title,
+      description,
+    },
   }
 }
 
@@ -175,7 +181,7 @@ export default function CompanyPage({ params }: Props) {
                 <a
                   href={listing.article.url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={listing.tier !== 'free' ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
                   className="inline-block mt-3 text-sm font-semibold text-brand-700 hover:text-brand-800"
                 >
                   Read the full article on {listing.name} →
@@ -278,6 +284,7 @@ export default function CompanyPage({ params }: Props) {
                   event="click_company_website"
                   href={listing.website}
                   newTab
+                  sponsored={listing.tier !== 'free'}
                   params={{ company_id: listing.id, company_name: listing.name, city: listing.city, service_category: listing.category[0], listing_tier: listing.tier }}
                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
                 >

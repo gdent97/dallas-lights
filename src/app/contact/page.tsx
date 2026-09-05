@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import ContactForm from '@/components/ContactForm'
 
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   description:
     'Contact DallasLights.com — questions about a listing, corrections, advertising, or anything else about the Dallas–Fort Worth lighting directory.',
   alternates: { canonical: 'https://www.dallaslights.com/contact' },
+  openGraph: { url: 'https://www.dallaslights.com/contact', images: [SOCIAL_IMAGE] },
 }
 
 export default function ContactPage() {

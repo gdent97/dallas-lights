@@ -85,7 +85,7 @@ export default function FeaturedSpotlight({
           <a
             href={listing.article.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="sponsored noopener noreferrer"
             className="mt-4 text-sm font-medium text-brand-700 hover:text-brand-800"
           >
             📖 {listing.article.title} →

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import QuoteLandingForm from '@/components/QuoteLandingForm'
 
 export const metadata: Metadata = {
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   // doesn't compete with the organic /outdoor/fort-worth page.
   robots: { index: false, follow: true },
   alternates: { canonical: 'https://www.dallaslights.com/fort-worth-landscape-lighting' },
+  openGraph: { url: 'https://www.dallaslights.com/fort-worth-landscape-lighting', images: [SOCIAL_IMAGE] },
 }
 
 const BENEFITS = [

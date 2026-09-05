@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import QuoteLandingForm from '@/components/QuoteLandingForm'
 import { CATEGORIES } from '@/lib/categories'
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description:
     'Tell us about your lighting project and get matched with a Dallas–Fort Worth lighting company. Free to request, with no obligation.',
   alternates: { canonical: 'https://www.dallaslights.com/get-quotes' },
+  openGraph: { url: 'https://www.dallaslights.com/get-quotes', images: [SOCIAL_IMAGE] },
 }
 
 interface Props {
