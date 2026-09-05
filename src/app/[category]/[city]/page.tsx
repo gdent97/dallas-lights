@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
@@ -20,13 +21,18 @@ export function generateMetadata({ params }: Props): Metadata {
   const cat = getCategoryMeta(params.category)
   const city = getCityBySlug(params.city)
   if (!cat || !city) return {}
-  const title = `${cat.title} in ${city.name}, TX`
-  const description = `Compare ${cat.title.toLowerCase()} companies serving ${city.name}, TX. Browse local lighting pros, see services and areas covered, and request a free quote on DallasLights.com.`
+  const title = `${cat.slug === 'holiday' ? 'Christmas Light Installation' : cat.title} in ${city.name}, TX`
+  const description = `Compare ${cat.slug === 'holiday' ? 'Christmas light installation' : cat.title.toLowerCase()} companies serving ${city.name}, TX. Browse local lighting pros, see services and areas covered, and request a free quote on DallasLights.com.`
   return {
     title,
     description,
     alternates: { canonical: `https://www.dallaslights.com/${cat.slug}/${city.slug}` },
-    openGraph: { title: `${title} — DallasLights.com`, description },
+    openGraph: {
+      url: `https://www.dallaslights.com/${cat.slug}/${city.slug}`,
+      images: [SOCIAL_IMAGE],
+      title: `${title} — DallasLights.com`,
+      description,
+    },
   }
 }
 
@@ -129,7 +135,7 @@ export default function CityCategoryPage({ params }: Props) {
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-4 py-10">
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-          {cat.title} in {city.name}, TX
+          {cat.slug === 'holiday' ? 'Christmas Light Installation' : cat.title} in {city.name}, TX
         </h1>
         <p className="text-gray-600 max-w-2xl mb-5">
           {listings.length} {cat.title.toLowerCase()} {listings.length === 1 ? 'company' : 'companies'} serving {city.name} and the surrounding Dallas–Fort Worth area. Compare local pros below, see what they offer, and reach out for a free quote.

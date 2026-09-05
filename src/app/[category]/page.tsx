@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
@@ -20,11 +21,13 @@ export function generateMetadata({ params }: Props): Metadata {
   const cat = getCategoryMeta(params.category)
   if (!cat) return {}
   return {
-    title: `${cat.title} in Dallas, TX`,
+    title: `${cat.slug === 'holiday' ? 'Christmas Light Installation' : cat.title} in DFW`,
     description: cat.metaDescription,
     alternates: { canonical: `https://www.dallaslights.com/${cat.slug}` },
     openGraph: {
-      title: `${cat.title} in Dallas, TX — DallasLights.com`,
+      url: `https://www.dallaslights.com/${cat.slug}`,
+      images: [SOCIAL_IMAGE],
+      title: cat.heading,
       description: cat.metaDescription,
     },
   }
@@ -129,6 +132,38 @@ export default function CategoryPage({ params }: Props) {
         )}
       </section>
 
+      {(cat.slug === 'holiday' || cat.slug === 'outdoor') && (
+        <section className="max-w-6xl mx-auto px-4 pb-12">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              {cat.slug === 'holiday' ? 'Compare seasonal Christmas lights and permanent lighting' : 'How to compare landscape lighting proposals'}
+            </h2>
+            {cat.slug === 'holiday' ? (
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>Seasonal Christmas lighting is installed for the holidays and removed afterward. Permanent lighting stays on the home year-round. Ask whether each installer offers the type you want, and compare the same roofline length and decorations across quotes.</p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li><strong>Seasonal displays:</strong> confirm who owns the lights, whether maintenance and takedown are included, and whether storage costs extra.</li>
+                  <li><strong>Permanent systems:</strong> compare the daytime appearance of the track, controls, parts and labor warranties, and who handles repairs.</li>
+                  <li><strong>Scheduling:</strong> ask for an installation window and a removal date before booking. Confirm insurance for work on your property directly with the company.</li>
+                </ul>
+                <Link href="/guides/christmas-light-installation-cost-dallas" className="inline-block text-brand-700 font-semibold hover:underline">Understand Christmas light installation costs in DFW →</Link>
+              </div>
+            ) : (
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>Start with the areas you want to illuminate: walkways, trees, the front of the home, or a patio. Share the same project scope with each company so you can compare the design and equipment as well as the total price.</p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li><strong>Design:</strong> request examples of completed nighttime projects and ask how the plan limits glare toward windows and neighboring homes.</li>
+                  <li><strong>Equipment:</strong> compare fixture counts, materials, light color, transformers, wiring, and timer or app controls.</li>
+                  <li><strong>Ongoing care:</strong> ask about adjustments after landscaping changes, replacement parts, and separate equipment and installation warranties.</li>
+                </ul>
+                <Link href="/guides/landscape-lighting-cost-dallas" className="inline-block text-brand-700 font-semibold hover:underline">Understand landscape lighting costs in DFW →</Link>
+              </div>
+            )}
+            <p className="text-sm text-gray-500 mt-5">Premium and Featured placements are paid advertising. <Link href="/about" className="underline hover:text-gray-900">How our directory works</Link>.</p>
+          </div>
+        </section>
+      )}
+
       {/* Browse by city (internal linking) */}
       {cities.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 pb-16">
@@ -151,7 +186,7 @@ export default function CategoryPage({ params }: Props) {
       <section className="bg-brand-50 border-t border-brand-100 py-10 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-xl font-bold text-gray-900 mb-2">
-            {cat.title} company in Dallas?
+            {cat.title} company in DFW?
           </h2>
           <p className="text-gray-600 text-sm mb-5">
             Get listed for free or upgrade to a Premium placement to appear at the top of this page.

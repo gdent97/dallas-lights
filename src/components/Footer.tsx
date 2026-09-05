@@ -25,7 +25,7 @@ export default function Footer() {
               {CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
                   <Link href={`/${cat.slug}`} className="hover:text-white transition-colors">
-                    {cat.title} in Dallas
+                    {cat.title} in DFW
                   </Link>
                 </li>
               ))}

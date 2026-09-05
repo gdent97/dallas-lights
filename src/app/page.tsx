@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import ListingCard from '@/components/ListingCard'
 import FeaturedSpotlight from '@/components/FeaturedSpotlight'
@@ -6,11 +7,13 @@ import NewsletterSignup from '@/components/NewsletterSignup'
 import { getFeaturedListings, getAllListings } from '@/lib/listings'
 import { CATEGORIES } from '@/lib/categories'
 import { GUIDES } from '@/lib/guides'
+import { getCityCategoryCombos } from '@/lib/cities'
 
 export const metadata: Metadata = {
-  title: 'Dallas Lights — Find Lighting Companies in Dallas, TX',
+  title: { absolute: 'Dallas–Fort Worth Lighting Companies | DallasLights.com' },
   description: 'Compare lighting companies serving Dallas–Fort Worth. Browse residential, commercial, outdoor, holiday, and smart-home lighting services or request a free quote.',
   alternates: { canonical: 'https://www.dallaslights.com' },
+  openGraph: { url: 'https://www.dallaslights.com', images: [SOCIAL_IMAGE] },
 }
 
 const SCHEMA = {
@@ -18,7 +21,7 @@ const SCHEMA = {
   '@type': 'WebSite',
   name: 'DallasLights.com',
   url: 'https://www.dallaslights.com',
-  description: 'Directory of lighting companies in Dallas, TX',
+  description: 'Directory of lighting companies serving Dallas–Fort Worth',
 }
 
 export default function HomePage() {
@@ -31,6 +34,10 @@ export default function HomePage() {
     .filter((l) => !(l.featured || l.tier === 'featured'))
     .slice(0, 6)
   const totalCount = getAllListings().length
+  const localPages = getCityCategoryCombos().filter((page) =>
+    ['holiday', 'outdoor'].includes(page.category) &&
+    ['dallas', 'fort-worth', 'plano', 'frisco'].includes(page.citySlug),
+  )
 
   return (
     <>
@@ -43,7 +50,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-brand-900 text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Find Lighting Companies<br />in Dallas, TX
+            Find Lighting Companies<br />in Dallas–Fort Worth
           </h1>
           <p className="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
             Compare local residential, commercial, landscape, smart-home, and holiday lighting
@@ -128,6 +135,19 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">Find lighting installers near you</h2>
+        <p className="text-gray-600 mb-6">Compare companies that list your city in their service area.</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {localPages.map((page) => (
+            <Link key={`${page.category}/${page.citySlug}`} href={`/${page.category}/${page.citySlug}`}
+              className="rounded-xl border border-gray-200 bg-white p-4 text-brand-700 font-semibold hover:border-brand-300 hover:bg-brand-50">
+              {page.category === 'holiday' ? 'Christmas light installation' : 'Landscape lighting'} in {page.cityName}
+            </Link>
+          ))}
         </div>
       </section>
 

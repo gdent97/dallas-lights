@@ -481,7 +481,7 @@ export function getAllListings(): Listing[] {
 
 // Tokens in `areasServed` that mean "serves the whole metro" — these companies
 // should appear on every city page.
-const METRO_TOKENS = ['DFW Metroplex', 'Dallas–Fort Worth', 'Dallas-Fort Worth', 'DFW', 'North Dallas']
+const METRO_TOKENS = ['DFW Metroplex', 'Dallas–Fort Worth', 'Dallas-Fort Worth', 'DFW']
 
 function servesCity(listing: Listing, cityName: string): boolean {
   return listing.areasServed.some(

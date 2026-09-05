@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   description:
     'Put your lighting company in front of Dallas–Fort Worth homeowners. Free listings, plus Premium and Featured placements with photos, top position, and direct quote requests.',
   alternates: { canonical: 'https://www.dallaslights.com/advertise' },
+  openGraph: { url: 'https://www.dallaslights.com/advertise', images: [SOCIAL_IMAGE] },
 }
 
 interface Tier {

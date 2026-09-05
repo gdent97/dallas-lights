@@ -19,11 +19,10 @@ export const metadata: Metadata = {
     default: 'Dallas Lights — Lighting Companies in Dallas, TX',
     template: '%s | DallasLights.com',
   },
-  description: 'Compare lighting companies, designers, and electricians serving Dallas–Fort Worth. Browse verified business details, services, and request free quotes.',
+  description: 'Compare lighting companies, designers, and electricians serving Dallas–Fort Worth. Browse company details, services, and request free quotes.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://www.dallaslights.com',
     siteName: 'DallasLights.com',
     images: [{ url: '/brand/og-image-wide.png', width: 1200, height: 630 }],
   },

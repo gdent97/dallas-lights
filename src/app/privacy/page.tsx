@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy policy for DallasLights.com — what information we collect, how it is used, and who to contact with questions.',
   alternates: { canonical: 'https://www.dallaslights.com/privacy' },
+  openGraph: { url: 'https://www.dallaslights.com/privacy', images: [SOCIAL_IMAGE] },
   robots: { index: true, follow: true },
 }
 

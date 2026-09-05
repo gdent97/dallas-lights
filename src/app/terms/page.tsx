@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Terms of Use',
   description: 'Terms of use for DallasLights.com — how the directory works, listing accuracy, and limitations.',
   alternates: { canonical: 'https://www.dallaslights.com/terms' },
+  openGraph: { url: 'https://www.dallaslights.com/terms', images: [SOCIAL_IMAGE] },
 }
 
 export default function TermsPage() {

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SOCIAL_IMAGE } from '@/lib/seo'
 import Link from 'next/link'
 import { GUIDES } from '@/lib/guides'
 
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   title: 'DFW Lighting Guides & Resources',
   description: 'Local guides to lighting in Dallas–Fort Worth — where to see Christmas lights, what installation costs, and how to pick the right company.',
   alternates: { canonical: 'https://www.dallaslights.com/guides' },
+  openGraph: { url: 'https://www.dallaslights.com/guides', images: [SOCIAL_IMAGE] },
 }
 
 export default function GuidesIndex() {
