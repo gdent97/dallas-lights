@@ -457,6 +457,24 @@ From Preston Hollow and Highland Park to Westlake, Southlake, Frisco, Prosper, L
     ],
     featured: true,
   },
+  {
+    id: '24',
+    slug: 'bright-ideas-custom-lighting',
+    name: 'Bright Ideas Custom Lighting',
+    tier: 'free',
+    category: ['outdoor', 'residential'],
+    // Submitted by the company via /submit (Sep 2026); details match their own site.
+    phone: '(817) 936-1302',
+    email: 'estimates@brightideasoutdoor.com',
+    website: 'https://brightideasoutdoor.com/',
+    city: 'Fort Worth',
+    state: 'TX',
+    description: 'Residential landscape, architectural, pathway, and outdoor living lighting for Fort Worth and communities within about 30 miles.',
+    services: ['Landscape Lighting', 'Garden Lighting', 'Architectural Lighting', 'Pathway Lighting', 'Driveway Lighting', 'Outdoor Living Lighting', 'Lighting Consultations'],
+    // Their site names only Fort Worth plus a ~30-mile radius; these cities sit well inside it.
+    areasServed: ['Fort Worth', 'Arlington', 'Keller', 'Southlake', 'Colleyville', 'Grapevine'],
+    featured: false,
+  },
 ]
 
 export function getListingBySlug(slug: string): Listing | undefined {
