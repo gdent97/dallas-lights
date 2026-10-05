@@ -1,0 +1,6 @@
+{
+  "name":"etf-edge-finder",
+  "private":true,
+  "version":"6.2.0",
+  "type":"module"
+}

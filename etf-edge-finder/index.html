@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ETF Edge Finder</title>
+<style>
+*{box-sizing:border-box}body{font:14px Arial,sans-serif;max-width:1500px;margin:20px auto;padding:0 16px;color:#111;line-height:1.42;background:#fff}h1,h2,h3{margin-top:0}.card{border:1px solid #ddd;border-radius:14px;padding:16px;margin:14px 0}.soft{background:#f7f7f7}.muted{color:#666}.tiny{font-size:11px}.small{font-size:12px}.good{color:#087a2b;font-weight:700}.warn{color:#8a5b00;font-weight:700}.bad{color:#b00020;font-weight:700}.neutral{color:#444;font-weight:700}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.box,.metric{border:1px solid #ddd;border-radius:10px;padding:11px;background:#fff}.box b,.metric b{display:block;margin-bottom:3px}.hero{border:2px solid #111}.decisionHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.decisionBadge{display:inline-block;padding:10px 14px;border-radius:10px;font-size:18px;font-weight:800}.hold{background:#eaf6ee;color:#075a21}.check{background:#fff4dd;color:#6d4900}.risk{background:#fdecef;color:#7f0016}.info{background:#eef2f6;color:#263238}.formula{font-size:16px;font-weight:700;text-align:center;background:#eee;border-radius:8px;padding:10px;margin:10px 0}.callout{border-left:4px solid #111;padding-left:10px;font-size:16px}.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end}label{display:block;font-weight:700;font-size:12px;margin-bottom:3px}input,select,textarea{padding:7px;border:1px solid #bbb;border-radius:7px;background:#fff;max-width:100%}button{padding:8px 11px;border:0;border-radius:7px;background:#111;color:#fff;cursor:pointer}.secondary{background:#eee;color:#111;border:1px solid #ccc}.dangerBtn{background:#fff;color:#8b0017;border:1px solid #d7aab3}.ctrl input{width:128px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border-bottom:1px solid #ddd;padding:8px 6px;text-align:left;vertical-align:top}th{background:#f5f5f5}#screen th.sort{cursor:pointer}.wrap{overflow-x:auto}.num{width:76px}.shares{width:90px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.form{display:grid;grid-template-columns:1.2fr repeat(4,1fr) auto auto;gap:8px;align-items:end}.form5{display:grid;grid-template-columns:1.2fr 1.2fr repeat(3,1fr) auto;gap:8px;align-items:end}.act{display:inline-block;padding:5px 7px;border-radius:7px;font-weight:700}.ok{background:#eaf6ee;color:#075a21}.alert{background:#fdecef;color:#7f0016}.wait{background:#fff4dd;color:#6d4900}.freshbadge,.pill{display:inline-block;padding:3px 7px;border-radius:999px;font-size:10px;margin:2px 3px 0 0}.fresh{background:#eaf6ee;color:#075a21}.delay{background:#fff4dd;color:#6d4900}.stale{background:#fdecef;color:#7f0016}.closed{background:#eee;color:#555}.marketbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;border:1px solid #ddd;border-radius:9px;padding:9px 11px;background:#fafafa;margin:8px 0 12px}.headlineValue{font-size:20px;font-weight:800}.divider{border-top:1px solid #ddd;margin:14px 0}.right{text-align:right}.note{background:#fafafa;border:1px dashed #ccc;border-radius:9px;padding:10px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.statusLine{font-size:15px;margin-top:5px}.hidden{display:none}.pairCard{border:1px solid #ccc;border-radius:12px;padding:14px;margin:10px 0}.qualityA{background:#eaf6ee;color:#075a21}.qualityB{background:#eef2f6;color:#263238}.qualityC{background:#fff4dd;color:#6d4900}.big{font-size:22px;font-weight:800}details>summary{cursor:pointer;font-weight:700;padding:3px 0}.sourceLine{font-size:11px;color:#666;margin-top:4px}.screenTable{min-width:1120px}.screenTable .pair{width:15%}.screenTable .why{width:20%}.screenTable .borrow{width:14%}.screenTable .avail{width:11%}.screenTable .plan{width:12%}.screenTable .setup{width:18%}.screenTable .decision{width:10%}.backupWarn{background:#fff7e8;border:1px solid #efd09c;border-radius:9px;padding:9px}.corpAlert{background:#fff4dd;border:1px solid #e4c37b;border-radius:9px;padding:10px 12px;margin:8px 0 12px}.corpAlert b{color:#6d4900}.journalTable{min-width:900px}@media(max-width:950px){.grid,.grid3,.summary{grid-template-columns:1fr 1fr}.form,.form5{grid-template-columns:1fr 1fr}}@media(max-width:650px){.grid,.grid3,.summary,.form,.form5{grid-template-columns:1fr}.decisionBadge{font-size:16px}.right{text-align:left}}
+body{font-size:16px}.tiny,.sourceLine,.freshbadge,.pill{font-size:12px}.small,label,table{font-size:14px}input,select,button{font:inherit;min-height:40px}button:disabled{opacity:.55;cursor:wait}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #2468c9;outline-offset:3px}details{margin-top:12px}.form,.form5{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}td{overflow-wrap:anywhere}.card{scroll-margin-top:16px}#storageWarning{position:sticky;top:0;z-index:10}#cloudVersions button{margin:4px} [hidden]{display:none!important}
+</style>
+<link rel="stylesheet" href="/workspace.css">
+</head>
+<body>
+<h1 style="margin-bottom:2px">ETF Edge Finder</h1>
+<div class="muted">A decision-support tracker for long-underlying / short-leveraged-ETF relative-value trades.</div>
+
+<div id="storageWarning" role="alert" class="backupWarn" hidden></div>
+<div class="card hero">
+  <div class="decisionHead">
+    <div><h2 style="margin-bottom:4px">What should I do now?</h2><div class="muted">This section separates <b>arb performance</b>, <b>hedge drift</b>, <b>borrow risk</b>, and <b>data quality</b>. A hedge warning does not automatically mean the arb is failing.</div></div>
+    <button data-refresh onclick="run()">Refresh Market Data</button>
+  </div>
+  <div id="decisionCenter"><div class="muted" style="padding:12px 0">Loading open positions…</div></div>
+</div>
+
+<section class="card" aria-labelledby="lifetimeTitle">
+<h2 id="lifetimeTitle">Lifetime results</h2>
+<p class="small muted">Open and closed pairs stay in your results. Net includes recorded costs and income; borrow estimates are shown separately, and unrecorded costs may remain. This is a trade journal, not a broker statement.</p>
+<div id="lifetimeSummary" class="summary"></div>
+<div class="wrap"><table><thead><tr><th>Pair / status</th><th>Realized price P&amp;L</th><th>Unrealized</th><th>Costs</th><th>Income</th><th>Net after recorded costs</th></tr></thead><tbody id="lifetimeRows"></tbody></table></div>
+<details open><summary>Daily performance observations</summary><p class="small">Aggregate history is preserved. New complete observations also store every pair separately so you can see which positions are helping or hurting. The return column uses the strategy-capital amount recorded at that observation when available.</p><div class="controls" style="margin:10px 0"><div class="ctrl"><label for="performanceView">View</label><select id="performanceView" onchange="renderPerformanceView()"><option value="aggregate">Aggregate strategy</option></select></div></div><div class="wrap"><table><thead><tr><th>Date</th><th>Captured</th><th>Net P&amp;L</th><th>Change vs prior obs.</th><th>Change / strategy capital</th><th>Coverage</th></tr></thead><tbody id="performanceRows"></tbody></table></div><p id="performanceStartNote" class="small muted"></p><h3>Pair contribution since position-level tracking began</h3><div class="wrap"><table><thead><tr><th>Pair</th><th>First tracked</th><th>Tracked P&amp;L change</th><th>Current net P&amp;L</th><th>Observations</th></tr></thead><tbody id="performanceRankingRows"></tbody></table></div></details>
+<details><summary>Borrow-rate history</summary><table><thead><tr><th>ETF</th><th>Entered rate</th><th>Checked</th></tr></thead><tbody id="borrowHistoryRows"></tbody></table></details>
+</section>
+
+<section class="card" aria-labelledby="capitalTitle">
+<h2 id="capitalTitle">Account capital</h2>
+<p class="small muted">Enter the actual account equity/capital you consider committed to this strategy. Because the trades use margin, gross long + short notional is shown separately and is <b>not</b> labeled as capital.</p>
+<div class="controls"><div class="ctrl"><label for="strategyCapital">Strategy capital in this account $</label><input id="strategyCapital" type="number" min="1" step="100" placeholder="e.g. 75000"></div><div class="ctrl"><label>Capital tracking</label><div id="strategyCapitalStatus" class="small muted">Set the current capital base.</div></div></div>
+<div id="capitalSummary" class="summary" style="margin-top:12px"></div>
+</section>
+
+<div class="card soft">
+<h2>How this trade works — in plain English</h2>
+<p>Leveraged ETFs target about <b>2x or 3x the DAILY move</b> of an underlying stock, ETF, index exposure, or asset. Some repeatedly fall short because of financing, swaps/futures, fees, and imperfect tracking.</p>
+<p class="callout"><b>The idea:</b> short the expensive or inefficient wrapper, while owning enough of the underlying hedge to reduce the directional bet.</p>
+<div class="grid3">
+  <div class="box"><b>1. Find excess drag</b>First subtract normal financing and fund costs. We care about the shortfall that remains after those ordinary costs.</div>
+  <div class="box"><b>2. Hedge direction</b>For a 2x ETF, roughly $5,000 short is paired with roughly $10,000 long. For a 3x ETF, roughly $3,333 short pairs with roughly $10,000 long.</div>
+  <div class="box"><b>3. Manage it like a daily-reset product</b>The leveraged ETF resets daily. The site shows intraday drift, but normally waits until near the close before turning that drift into a rebalance instruction.</div>
+</div>
+<div class="formula">Net Excess Edge = Observed Tracking Shortfall − Normal Financing & Fees − Borrow Cost − Trading Buffer</div>
+<p><b>Two different things can happen at the same time:</b> the leveraged ETF can underperform its daily target (good for the arb) while your short dollar exposure grows too large after a rally (a hedge-management issue). The Decision Center shows those separately.</p>
+<div class="grid3">
+  <div class="box"><b>ARB status</b>Compares the latest session's leveraged-ETF return with its official daily target. Positive shortfall = the wrapper underperformed its target.</div>
+  <div class="box"><b>HEDGE status</b>Shows an <i>indicative next-reset</i> hedge using current market values. During normal intraday trading, a moderate drift is usually a "check near close" item, not an automatic trade.</div>
+  <div class="box"><b>BORROW status</b>Compares your current borrow rate with the screen's break-even borrow estimate and warns when your Fidelity borrow input is old.</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Broker Snapshot</h2>
+<p class="small muted">For an actual decision, enter the live Fidelity prices and borrow information you see. A fresh broker snapshot overrides Yahoo prices in Open Positions and the Decision Center for 30 minutes.</p>
+<div class="form5">
+  <div><label for="snapPair">Pair</label><select id="snapPair"></select></div>
+  <div><label for="snapETF">Leveraged ETF price</label><input id="snapETF" type="number" step=".001" placeholder="e.g. 14.20"></div>
+  <div><label for="snapUnder">Underlying price</label><input id="snapUnder" type="number" step=".001" placeholder="e.g. 20.73"></div>
+  <div><label for="snapBorrow">Borrow %</label><input id="snapBorrow" type="number" step=".01"></div>
+  <div><label for="snapAvail">Shares available</label><input id="snapAvail" type="number"></div>
+  <button onclick="saveSnapshot()">Save Fidelity Snapshot</button>
+</div>
+<div id="snapMsg" class="tiny muted" style="margin-top:6px"></div>
+</div>
+
+<div class="card">
+<h2>Open Positions</h2>
+<p class="small muted">One row per pair. Multiple entries are combined for risk management. Rebalances are recorded separately so you do not have to overwrite an old lot.</p>
+<div id="positionSummary" class="summary"></div>
+<div class="wrap"><table><thead><tr><th>Pair</th><th>Current Position</th><th>Average Entry</th><th>Gross P&L</th><th>Recorded Costs</th><th>Indicative Hedge</th><th>Borrow Run-Rate</th><th>Decision</th></tr></thead><tbody id="positions"></tbody></table></div>
+</div>
+
+<div class="card">
+<h2>Record Trades & Rebalances</h2>
+<details open><summary>Add a new paired entry</summary>
+<p class="tiny muted">Use this when you put on another full long/short pair. It creates a new entry lot; it does not replace an older one.</p>
+<div class="form">
+  <div><label for="tp">Pair</label><select id="tp"></select></div>
+  <div><label for="tls">Long shares</label><input id="tls" type="number"></div>
+  <div><label for="tlf">Long fill</label><input id="tlf" type="number" step=".001"></div>
+  <div><label for="tss">Short shares</label><input id="tss" type="number"></div>
+  <div><label for="tsf">Short fill</label><input id="tsf" type="number" step=".001"></div>
+  <div><label for="tradeWhen">Fill time (your local time; blank = now)</label><input id="tradeWhen" type="datetime-local"></div><button id="tradeSaveBtn" onclick="saveTrade()">Save New Lot</button><button class="secondary" onclick="clearTradeForm()">Clear</button>
+</div>
+</details>
+<div class="divider"></div>
+<details open><summary>Record a rebalance, partial exit, or actual cost</summary>
+<p class="tiny muted">If you cover 90 BMNU, sell 100 BMNR, add more short, or want to record an actual borrow/commission cost, enter it here. This changes the current position without changing the original entry fills.</p>
+<div class="form5">
+  <div><label for="adjPair">Pair</label><select id="adjPair"></select></div>
+  <div><label for="adjAction">Action</label><select id="adjAction" onchange="adjActionChanged()"><option value="short_cover">Cover short</option><option value="short_add">Add short</option><option value="long_buy">Buy more long</option><option value="long_sell">Sell long</option><option value="cost">Record actual cost</option><option value="income">Record cash income / dividend</option></select></div>
+  <div><label for="adjShares" id="adjSharesLabel">Shares</label><input id="adjShares" type="number"></div>
+  <div><label for="adjPrice" id="adjPriceLabel">Fill price</label><input id="adjPrice" type="number" step=".001"></div>
+  <div><label for="adjNote">Note</label><input id="adjNote" type="text" placeholder="rebalance / borrow fee"></div>
+  <div><label for="adjustWhen">Time (local; blank = now)</label><input id="adjustWhen" type="datetime-local"></div>
+<div><label for="costCategory">Cost or income category</label><select id="costCategory" hidden><option value="borrow">Borrow charge</option><option value="margin">Margin interest</option><option value="distribution">Distribution / dividend</option><option value="fee">Trading fee</option><option value="other">Other</option></select></div>
+<button onclick="saveAdjustment()">Record</button>
+</div>
+</details>
+</div>
+
+<div class="card">
+<h2>Trade Journal</h2>
+<details open><summary>Entry lots</summary>
+<div class="wrap"><table class="journalTable"><thead><tr><th>Pair</th><th>Date / Time</th><th>Long Entry</th><th>Short Entry</th><th>Entry Hedge</th><th>Borrow / availability at entry</th><th></th></tr></thead><tbody id="lots"></tbody></table></div>
+</details>
+<div class="divider"></div>
+<details><summary>Rebalances, partial exits & costs</summary>
+<div class="wrap"><table class="journalTable"><thead><tr><th>Pair</th><th>Time</th><th>Action</th><th>Shares / Cost</th><th>Fill</th><th>Note</th><th></th></tr></thead><tbody id="adjustments"></tbody></table></div>
+</details>
+</div>
+
+<div class="card">
+<div class="decisionHead"><div><h2 style="margin-bottom:4px">ETF Screen</h2><div class="small muted">This is a screening tool, not an automatic trade signal. A candidate does not become "ready" until current borrow and availability have been checked.</div></div><div class="toolbar"><button data-refresh onclick="run()">Refresh</button></div></div>
+<p class="small muted">Refreshes every 5 minutes during the session, or every 30 minutes outside it, while this page is visible.</p><div id="marketBar" class="marketbar"><b>Market data:</b><span id="appRefresh" class="muted">Refreshing…</span><span id="oldestQuote" class="muted"></span><span id="errorCount" class="muted"></span></div>
+<div id="corpActionBar"></div>
+<div class="wrap"><table class="screenTable" id="screen"><thead><tr><th class="pair sort" onclick="sortBy('pair')">Pair</th><th class="why sort" onclick="sortBy('edge')">Why it might work</th><th class="borrow sort" onclick="sortBy('borrow')">Borrow</th><th class="avail sort" onclick="sortBy('avail')">Availability</th><th class="plan sort" onclick="sortBy('planned')">Planned Short</th><th class="setup">Trade Setup</th><th class="decision sort" onclick="sortBy('rating')">Screen Decision</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div>
+
+<div class="card">
+<h2>Settings</h2>
+<div class="controls">
+  <div class="ctrl"><label for="target">Default target long $</label><input id="target" type="number" value="10000"></div>
+  <div class="ctrl"><label for="band">Near-close hedge band ±%</label><input id="band" type="number" value="10"></div>
+</div>
+<details style="margin-top:12px"><summary>Advanced screening assumptions</summary>
+<div class="controls" style="margin-top:8px">
+  <div class="ctrl"><label for="base">Base funding %</label><input id="base" type="number" step=".05" value="3.75"></div>
+  <div class="ctrl"><label for="spread">Financing spread %</label><input id="spread" type="number" step=".05" value="1"></div>
+  <div class="ctrl"><label for="fee">ETF fee allowance %</label><input id="fee" type="number" step=".05" value="1"></div>
+  <div class="ctrl"><label for="buffer">Trading buffer %</label><input id="buffer" type="number" step=".25" value="1"></div>
+  <div class="ctrl"><label for="closeWindow">Near-close window (min)</label><input id="closeWindow" type="number" value="15"></div>
+  <div class="ctrl"><label for="emergencyBand">Emergency intraday band ±%</label><input id="emergencyBand" type="number" value="20"></div>
+</div>
+<div class="note small" style="margin-top:10px">The normal-cost model is intentionally a screening approximation. It does not know each fund's exact swap financing, expense ratio, tax effects, or your broker's margin treatment.</div>
+</details>
+</div>
+
+<div class="card">
+<h2>Backup & Data Safety</h2>
+<div class="backupWarn"><b>Local saves and recovery points protect against accidental edits.</b> Clearing browser data also clears those copies. Connect private cloud backup below and keep the recovery-key file outside your browser.</div>
+<p id="localSafety" role="status"></p>
+<div class="note"><h3>Private cloud backup</h3><p class="small">Connect with your recovery-key file to save encrypted copies automatically after changes. Keep that file safe: it is required to recover your backups on another device.</p><p id="cloudStatus" role="status">Cloud backup not connected in this browser.</p><div class="toolbar"><button id="cloudConnect" onclick="document.getElementById('cloudKeyFile').click()">Connect recovery key</button><input id="cloudKeyFile" type="file" class="hidden" accept="application/json"><button id="cloudSave" class="secondary" disabled>Back up now</button><button id="cloudList" class="secondary" disabled>Recover from cloud</button></div><div id="cloudVersions"></div></div>
+<div class="toolbar" style="margin-top:10px"><button onclick="downloadBackup()">Download Backup</button><button class="secondary" onclick="document.getElementById('restoreFile').click()">Import Backup Safely</button><input id="restoreFile" class="hidden" type="file" accept="application/json" onchange="restoreBackup(this.files[0])"></div>
+<details style="margin-top:14px"><summary>Recover an earlier local version</summary><p class="small">Reverting saves the current journal as a recovery point first. The most recent 40 local versions are available; cloud backups are kept separately.</p><label for="recoveryPoints">Recovery point</label><select id="recoveryPoints"></select><button id="recoveryRestore" class="secondary" onclick="restoreRecoveryPoint()">Review and revert</button></details>
+<details><summary>Archived records</summary><table><thead><tr><th>Kind</th><th>Pair</th><th>Archived</th><th>Recovery</th></tr></thead><tbody id="archiveRows"></tbody></table></details>
+<details><summary>Activity history</summary><table><thead><tr><th>When</th><th>Change</th></tr></thead><tbody id="activityRows"></tbody></table></details>
+<details><summary>Advanced recovery</summary><p class="small">If stored data cannot be read, this exports the original values for repair without modifying them.</p><button class="secondary" onclick="exportRawStorage()">Export original browser data</button></details>
+<div id="saveStatus" class="tiny muted" style="margin-top:6px"></div>
+</div>
+
+<div class="card small muted"><b>Execution check:</b> Yahoo data is useful for screening, but actual decisions should use current Fidelity bid/ask, borrow rate, available shares, margin requirements, and your actual fills. Leveraged ETFs pursue daily objectives; multi-day results and intraday leverage can differ from the headline multiple.</div>
+
+<script src="/data.js"></script>
+<script src="/app.js"></script>
+<script src="/workspace.js"></script>
+<script src="/cloud.js"></script>
+</body>
+</html>
