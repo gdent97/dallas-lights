@@ -5,8 +5,8 @@
   const from64=s=>Uint8Array.from(atob(s),x=>x.charCodeAt(0));
   const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
   async function hash(text){return new Uint8Array(await crypto.subtle.digest('SHA-256',utf8.encode(text)));}
-  async function credentials(){if(!key||!/^[A-Za-z0-9_-]{43}$/.test(key))throw Error('Connect your recovery-key file first.');return{auth:hex(await hash('auth:'+key)),encryption:await crypto.subtle.importKey('raw',await hash('encryption:'+key),'AES-GCM',false,['encrypt','decrypt'])};}
-  async function request(path='',options={}){const c=await credentials(),r=await fetch('/api/backups'+path,{...options,headers:{'x-backup-auth':c.auth,...options.headers},signal:AbortSignal.timeout(25000)});const body=await r.json();if(!r.ok)throw Error(body.error||'Backup request failed.');return body;}
+  async function credentials(){if(!key||!/^[A-Za-z0-9_-]{43}$/.test(key))throw Error('Connect your recovery-key file first.');const encryptionBytes=await hash('encryption:'+key);return{auth:hex(await hash('auth:'+key)),proof:b64(encryptionBytes),encryption:await crypto.subtle.importKey('raw',encryptionBytes,'AES-GCM',false,['encrypt','decrypt'])};}
+  async function request(path='',options={}){const c=await credentials(),r=await fetch('/api/backups'+path,{...options,headers:{'x-backup-auth':c.auth,'x-backup-proof':c.proof,...options.headers},signal:AbortSignal.timeout(25000)});const body=await r.json();if(!r.ok)throw Error(body.error||'Backup request failed.');return body;}
   function enabled(value){el('cloudSave').disabled=!value;el('cloudList').disabled=!value;}
   async function encrypt(data){const c=await credentials(),iv=crypto.getRandomValues(new Uint8Array(12)),ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},c.encryption,utf8.encode(JSON.stringify(data)));return{version:1,iv:b64(iv),ciphertext:b64(new Uint8Array(ciphertext))};}
   async function decrypt(envelope){const c=await credentials(),plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:from64(envelope.iv)},c.encryption,from64(envelope.ciphertext));return ETFData.validate(JSON.parse(new TextDecoder().decode(plain)));}
