@@ -14,7 +14,7 @@
 .ops-input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}
 .ops-input-grid label{font-size:12px;font-weight:650;color:#475569}
 .ops-input-grid input,.ops-input-grid select{display:block;width:100%;margin-top:6px;border-radius:9px}
-.ops-scenarios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.ops-scenarios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
 .ops-scenario{border:1px solid #dce3eb;padding:16px;border-radius:14px;background:#fff;line-height:1.5;min-width:0}
 .ops-scenario:first-child{background:#f8fafc}
 .ops-scenario h3{font-size:14px;margin:0 0 10px}
