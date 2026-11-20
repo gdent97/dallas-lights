@@ -158,8 +158,9 @@ async function run(){
       refreshNote='All '+total+' pairs refreshed successfully '+fmtET(lastSuccessAt)+'.';
     }
     renderAll();
-    // A performance-save failure must never leave the market refresh spinner active.
-    if(successes)try{await capturePerformance();}catch(error){console.warn('Performance snapshot not saved:',error);}
+    // Release the refresh UI before starting any journal write. A browser lock held
+    // by another tab must never strand the market-data spinner.
+    if(successes)queueMicrotask(()=>{capturePerformance().catch(error=>console.warn('Performance snapshot not saved:',error));});
   }catch(error){
     lastRefreshAt=now();
     refreshNote='Refresh interrupted: '+(error?.message||String(error))+'. Previous valid quotes were preserved.';
