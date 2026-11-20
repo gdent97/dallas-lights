@@ -187,5 +187,133 @@
       return points.sort((a,b)=>b.savedAt-a.savedAt);
     }
   }
-  globalThis.ETFData={KEY,LEGACY,SETTINGS,DEFAULTS,empty,validate,replay,merge,Store,clone,stable};
+
+  // IndexedDB stores the authoritative journal. Leave the original localStorage
+  // journal untouched as a migration fallback; it must not consume more quota.
+  const DB_NAME='ETFEdgePersistentJournal';
+  const DB_STORE='records';
+  const DB_KEY='active';
+  function openDB(){
+    return new Promise((resolve,reject)=>{
+      const req=indexedDB.open(DB_NAME,1);
+      req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(DB_STORE))req.result.createObjectStore(DB_STORE);};
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error||Error('Database opening failed'));
+      req.onblocked=()=>reject(Error('Another tab is blocking database initialization'));
+    });
+  }
+  function readDB(db){
+    return new Promise((resolve,reject)=>{
+      const req=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(DB_KEY);
+      req.onsuccess=()=>resolve(req.result||null);
+      req.onerror=()=>reject(req.error||Error('Database read failed'));
+    });
+  }
+  function writeDB(db,record){
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction(DB_STORE,'readwrite');
+      tx.objectStore(DB_STORE).put(record,DB_KEY);
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error||Error('Database write failed'));
+      tx.onabort=()=>reject(tx.error||Error('Database transaction aborted'));
+    });
+  }
+  function keepRecoveries(rows){
+    const seen=new Set(),result=[];let bytes=0;
+    for(const p of [...rows].sort((a,b)=>(+b.savedAt||0)-(+a.savedAt||0))){
+      if(!object(p)||!object(p.data))continue;
+      try{validate(p.data);}catch{continue;}
+      const record={savedAt:+p.savedAt||Date.now(),label:String(p.label||'Recovery point').slice(0,300),data:p.data};
+      const key=record.savedAt+':'+record.label,size=2*JSON.stringify(record).length;
+      if(seen.has(key)||result.length>=6||bytes+size>8000000)continue;
+      seen.add(key);result.push(record);bytes+=size;
+    }
+    return result;
+  }
+  class PersistentStore extends Store {
+    constructor(storage,locks){
+      super(storage,locks);
+      this.mode='localStorage';this.db=null;this.dbRecoveries=[];
+      this.persistenceWarning='';
+      this.ready=this.initializeDB();
+    }
+    async initializeDB(){
+      if(typeof indexedDB==='undefined'){
+        this.persistenceWarning='IndexedDB unavailable. Using limited browser storage.';
+        return;
+      }
+      let db;
+      try{
+        db=await openDB();
+        const current=await readDB(db);
+        const legacy=this.error?[]:super.recoveryPoints();
+        const localDate=this.raw?Number(JSON.parse(this.raw).savedAt)||0:0;
+        let candidate;
+        if(current){
+          const saved=validate(current.data);
+          const revision=Number(current.revision)||0;
+          if(!this.error&&this.raw&&localDate>(+current.savedAt||0)&&stable(this.data)!==stable(saved)){
+            // Reconcile edits made by a pre-migration tab without dropping its trades.
+            const merged=merge(this.data,saved);
+            candidate={revision:Math.max(revision,this.revision)+1,savedAt:Date.now(),data:merged,
+              recoveries:keepRecoveries([{savedAt:current.savedAt,label:'Before migration reconciliation',data:saved},...(current.recoveries||[]),...legacy])};
+          }else{
+            candidate={revision,savedAt:+current.savedAt||Date.now(),data:saved,
+              recoveries:keepRecoveries([...(current.recoveries||[]),...legacy])};
+          }
+        }else{
+          if(this.error)throw this.error;
+          candidate={revision:this.revision,savedAt:localDate||Date.now(),data:validate(this.data),
+            recoveries:keepRecoveries(legacy)};
+        }
+        await writeDB(db,candidate);
+        const verified=await readDB(db);
+        assert(verified&&verified.revision===candidate.revision&&stable(verified.data)===stable(candidate.data),'Migrated database failed verification');
+        this.db=db;this.data=clone(verified.data);this.revision=verified.revision;
+        this.dbRecoveries=clone(verified.recoveries||[]);this.mode='indexedDB';this.error=null;
+        // Only duplicate recovery snapshots are removed AFTER verified migration.
+        // Never delete etfEdgeJournalV6: the original local journal stays as backup.
+        super.pruneRecoveries(0,0);
+        if(typeof BroadcastChannel!=='undefined'){
+          this.channel=new BroadcastChannel('ETFEdgeJournalChanges');
+          this.channel.onmessage=evt=>{
+            if(evt.data?.revision>this.revision)
+              window.dispatchEvent(new CustomEvent('journal-changed-elsewhere'));
+          };
+        }
+      }catch(e){
+        if(db&&db!==this.db)db.close();
+        this.persistenceWarning='IndexedDB migration unavailable ('+(e?.message||'unknown error')+'). Original browser journal retained.';
+      }
+    }
+    async save(data,label='Saved changes'){
+      await this.ready;
+      if(this.mode!=='indexedDB')return super.save(data,label);
+      assert(!this.error,'The journal could not be recovered safely. Export original browser storage before editing.');
+      assert(this.locks?.request,'This browser cannot safely coordinate saves. Use current Chrome, Safari, Firefox or Edge.');
+      const expected=this.revision;
+      return this.locks.request('etf-edge-journal-save',async()=>{
+        assert(this.revision===expected,'Another edit finished saving. Reload before continuing.');
+        const current=await readDB(this.db);
+        assert(current&&current.revision===expected,'A different tab saved newer data. Reload this page before editing.');
+        const next=validate(data);
+        next.activity.push({id:crypto.randomUUID(),ts:Date.now(),label});
+        const record={revision:expected+1,savedAt:Date.now(),data:next,
+          recoveries:keepRecoveries([{savedAt:Date.now(),label:'Before '+label,data:this.data},...(current.recoveries||[])])};
+        try{
+          await writeDB(this.db,record);
+          const check=await readDB(this.db);
+          assert(check&&check.revision===record.revision&&stable(check.data)===stable(next),'Could not verify saved journal');
+        }catch(e){throw Error('IndexedDB save failed; previous journal was not intentionally deleted: '+e.message);}
+        this.data=clone(next);this.revision=record.revision;this.dbRecoveries=clone(record.recoveries);
+        this.channel?.postMessage({revision:this.revision});
+        return clone(next);
+      });
+    }
+    recoveryPoints(){
+      return this.mode==='indexedDB'?clone(this.dbRecoveries):super.recoveryPoints();
+    }
+  }
+
+  globalThis.ETFData={KEY,LEGACY,SETTINGS,DEFAULTS,empty,validate,replay,merge,Store:PersistentStore,clone,stable};
 })();
