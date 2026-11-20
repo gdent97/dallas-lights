@@ -1,6 +1,6 @@
 /* Load the UI only after the persistent journal has been migrated/verified. */
 (() => {
-  globalThis.__etfBuild='2026-11-20c';
+  globalThis.__etfBuild='2026-11-20d';
   const journal=globalThis.__etfBootStore=new ETFData.Store(localStorage,navigator.locks);
   function load(src){return new Promise((resolve,reject)=>{
     const script=document.createElement('script');
