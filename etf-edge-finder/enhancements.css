@@ -1,0 +1,29 @@
+/* Portfolio workflow / daily operations */
+#borrowOperations,#capitalAndCarry,#rebalanceWorkbench,#riskAdjustedPerformance{border:1px solid var(--line,#dbe2e9);border-radius:16px;padding:22px;background:var(--card,#fff);margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.035)}
+#borrowOperations h2,#capitalAndCarry h2,#rebalanceWorkbench h2,#riskAdjustedPerformance h2{margin-bottom:6px;font-size:20px;letter-spacing:-.35px}
+#borrowOperations p,#capitalAndCarry p,#rebalanceWorkbench p,#riskAdjustedPerformance p{line-height:1.55}
+.ops-table{width:100%;border-collapse:collapse;min-width:570px}
+.ops-table th{font-size:12px;letter-spacing:.02em;text-transform:uppercase;color:#64748b;font-weight:700}
+.ops-table td{vertical-align:middle;padding:10px 12px}
+.ops-table input{width:130px;min-width:90px;max-width:100%;border-radius:9px;padding:8px 10px}
+.ops-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.ops-stat{border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;padding:14px;min-width:0}
+.ops-stat>span{display:block;color:#64748b;font-size:12px;font-weight:650;margin-bottom:6px}
+.ops-stat strong{display:block;font-size:19px;font-weight:740;line-height:1.25;letter-spacing:-.4px;overflow-wrap:anywhere}
+.ops-stat small{display:block;margin-top:6px;color:#64748b;font-size:12px;line-height:1.4}
+.ops-input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}
+.ops-input-grid label{font-size:12px;font-weight:650;color:#475569}
+.ops-input-grid input,.ops-input-grid select{display:block;width:100%;margin-top:6px;border-radius:9px}
+.ops-scenarios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.ops-scenario{border:1px solid #dce3eb;padding:16px;border-radius:14px;background:#fff;line-height:1.5;min-width:0}
+.ops-scenario:first-child{background:#f8fafc}
+.ops-scenario h3{font-size:14px;margin:0 0 10px}
+.ops-scenario>strong{display:block;font-size:16px;overflow-wrap:anywhere;margin-bottom:9px}
+.ops-scenario .small{margin-top:6px;font-size:12px;overflow-wrap:anywhere}
+.ops-scenario button{margin-top:12px}
+#borrowCheckNotice,#carryCoverage,#riskDataNote{margin-top:12px}
+#borrowOperations button,#rebalanceWorkbench button,#capitalAndCarry button,#riskAdjustedPerformance button{min-height:38px}
+#borrowOperations .toolbar{display:flex;flex-wrap:wrap;gap:8px}
+#riskAdjustedPerformance table td:nth-child(2){font-variant-numeric:tabular-nums}
+@media(max-width:1000px){.ops-scenarios{grid-template-columns:1fr}.ops-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:590px){.ops-stats{grid-template-columns:1fr}#borrowOperations,#capitalAndCarry,#rebalanceWorkbench,#riskAdjustedPerformance{padding:15px}.ops-table{min-width:495px}}

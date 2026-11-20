@@ -1,6 +1,6 @@
 /* Load the UI only after the persistent journal has been migrated/verified. */
 (() => {
-  globalThis.__etfBuild='2026-11-20d';
+  globalThis.__etfBuild='2026-11-20e';
   const journal=globalThis.__etfBootStore=new ETFData.Store(localStorage,navigator.locks);
   function load(src){return new Promise((resolve,reject)=>{
     const script=document.createElement('script');
@@ -9,7 +9,7 @@
     document.body.appendChild(script);
   });}
   journal.ready.then(async()=>{
-    for(const src of ['/app.js','/workspace.js','/cloud.js'])await load(src);
+    for(const src of ['/app.js','/workspace.js','/cloud.js','/enhancements.js'])await load(src);
   }).catch(error=>{
     const el=document.getElementById('storageWarning');
     if(el){el.hidden=false;el.textContent='Tracker could not initialize safely: '+error.message;}
