@@ -9,7 +9,7 @@
     document.body.appendChild(script);
   });}
   journal.ready.then(async()=>{
-    for(const src of ['/app.js','/workspace.js','/cloud.js'])await load(src);
+    for(const src of ['/app.js','/workspace.js','/cloud.js','/enhancements.js'])await load(src);
   }).catch(error=>{
     const el=document.getElementById('storageWarning');
     if(el){el.hidden=false;el.textContent='Tracker could not initialize safely: '+error.message;}
