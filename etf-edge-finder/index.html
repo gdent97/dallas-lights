@@ -95,7 +95,7 @@ body{font-size:16px}.tiny,.sourceLine,.freshbadge,.pill{font-size:12px}.small,la
 <details open><summary>Record a rebalance, partial exit, or actual cost</summary>
 <p class="tiny muted">If you cover 90 BMNU, sell 100 BMNR, add more short, or want to record an actual borrow/commission cost, enter it here. This changes the current position without changing the original entry fills.</p>
 <div class="form5">
-  <div><label for="adjPair">Pair</label><select id="adjPair"></select></div>
+  <div><label for="adjPair">Pair</label><select id="adjPair"></select></div><div class="small muted" id="adjOpenOnlyNotice" style="grid-column:1/-1">Only eligible recorded positions are shown.</div>
   <div><label for="adjAction">Action</label><select id="adjAction" onchange="adjActionChanged()"><option value="short_cover">Cover short</option><option value="short_add">Add short</option><option value="long_buy">Buy more long</option><option value="long_sell">Sell long</option><option value="cost">Record actual cost</option><option value="income">Record cash income / dividend</option></select></div>
   <div><label for="adjShares" id="adjSharesLabel">Shares</label><input id="adjShares" type="number"></div>
   <div><label for="adjPrice" id="adjPriceLabel">Fill price</label><input id="adjPrice" type="number" step=".001"></div>
@@ -160,7 +160,7 @@ body{font-size:16px}.tiny,.sourceLine,.freshbadge,.pill{font-size:12px}.small,la
 
 <div class="card small muted"><b>Execution check:</b> Yahoo data is useful for screening, but actual decisions should use current Fidelity bid/ask, borrow rate, available shares, margin requirements, and your actual fills. Leveraged ETFs pursue daily objectives; multi-day results and intraday leverage can differ from the headline multiple.</div>
 
-<script src="/data.js?v=2026-11-20d"></script>
-<script src="/bootstrap.js?v=2026-11-20d"></script>
+<script src="/data.js?v=2026-11-20e"></script>
+<script src="/bootstrap.js?v=2026-11-20e"></script>
 </body>
 </html>
