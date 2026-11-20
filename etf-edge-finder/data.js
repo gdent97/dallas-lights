@@ -93,6 +93,12 @@
     }
     return validate(out);
   }
+  // Recovery snapshots are full journal copies. Bound both count and bytes so
+  // a save cannot fill localStorage with redundant versions of the same history.
+  const RECOVERY_PREFIX = 'etfEdgeRecovery:';
+  const MAX_RECOVERY_POINTS = 6;
+  const RECOVERY_BYTES = 1000000; // UTF-16 byte estimate, leaves space for the live journal.
+  const isQuotaError = e => e?.name==='QuotaExceededError' || e?.code===22 || e?.code===1014;
   class Store {
     constructor(storage,locks) {
       this.storage=storage;this.locks=locks;this.raw=storage.getItem(KEY);this.error=null;
@@ -106,7 +112,41 @@
           for(const [k,key] of Object.entries(SETTINGS)) if(storage.getItem(key)!=null)d.settings[k]=storage.getItem(key);
           this.data=validate(d);this.revision=0;
         }
+        // Recover browser quota immediately on page load, after validating the active journal.
+        this.pruneRecoveries();
       } catch(e) {this.error=e;this.data=empty();this.revision=0;}
+    }
+    recoveryEntries() {
+      const entries=[];
+      for(let i=0;i<this.storage.length;i++){
+        const key=this.storage.key(i);
+        if(key?.startsWith(RECOVERY_PREFIX)) {
+          const raw=this.storage.getItem(key);
+          entries.push({key,bytes:2*(key.length+(raw?.length||0))});
+        }
+      }
+      return entries.sort((a,b)=>a.key.localeCompare(b.key));
+    }
+    pruneRecoveries(maxCount=MAX_RECOVERY_POINTS,maxBytes=RECOVERY_BYTES) {
+      const entries=this.recoveryEntries();
+      let bytes=entries.reduce((sum,p)=>sum+p.bytes,0);
+      while(entries.length && (entries.length>maxCount || bytes>maxBytes)) {
+        const oldest=entries.shift();
+        this.storage.removeItem(oldest.key);
+        bytes-=oldest.bytes;
+      }
+    }
+    writeWithReclaim(key,value,protectedKey=null) {
+      for(;;) {
+        try {this.storage.setItem(key,value);return;}
+        catch(e) {
+          if(!isQuotaError(e))throw e;
+          // Never touch unrelated browser keys, the active journal, or the new recovery point.
+          const oldest=this.recoveryEntries().find(p=>p.key!==protectedKey);
+          if(!oldest)throw e;
+          this.storage.removeItem(oldest.key);
+        }
+      }
     }
     async save(data,label='Saved changes') {
       assert(!this.error,'Saving is paused because existing data could not be read. Export the original storage and recover it first.');
@@ -117,20 +157,33 @@
         assert(this.storage.getItem(KEY)===this.raw,'Another tab saved newer changes. Reload this tab before editing; its changes have been preserved.');
         const next=validate(data);
         next.activity.push({id:crypto.randomUUID(),ts:Date.now(),label});
-        // Preserve all journal events. Only the redundant recovery snapshots are bounded.
-        const pointKey='etfEdgeRecovery:'+Date.now()+':'+crypto.randomUUID();
-        this.storage.setItem(pointKey,JSON.stringify({savedAt:Date.now(),label:'Before '+label,data:this.data}));
         const raw=JSON.stringify({revision:this.revision+1,savedAt:Date.now(),data:next});
-        this.storage.setItem(KEY,raw); // One atomic write; failure leaves the old journal intact.
-        assert(this.storage.getItem(KEY)===raw,'Could not verify the saved journal.');
+        const pointKey=RECOVERY_PREFIX+Date.now()+':'+crypto.randomUUID();
+        const point=JSON.stringify({savedAt:Date.now(),label:'Before '+label,data:this.data});
+        // IMPORTANT: reclaim BEFORE allocating the next full recovery copy.
+        // The current validated journal remains untouched if either write fails.
+        this.pruneRecoveries(MAX_RECOVERY_POINTS-1,RECOVERY_BYTES);
+        let createdPoint=false;
+        try {
+          this.writeWithReclaim(pointKey,point);
+          createdPoint=true;
+          this.writeWithReclaim(KEY,raw,pointKey);
+          assert(this.storage.getItem(KEY)===raw,'Could not verify the saved journal.');
+        } catch(e) {
+          if(createdPoint && this.storage.getItem(KEY)===this.raw)this.storage.removeItem(pointKey);
+          if(isQuotaError(e))throw Error('Browser storage is still full. No new journal changes were saved. Download a JSON backup and check available browser storage.');
+          throw e;
+        }
         this.raw=raw;this.data=clone(next);this.revision++;
-        const points=[];for(let i=0;i<this.storage.length;i++){const k=this.storage.key(i);if(k?.startsWith('etfEdgeRecovery:'))points.push(k);}
-        points.sort();for(const k of points.slice(0,-40))this.storage.removeItem(k);
+        this.pruneRecoveries(MAX_RECOVERY_POINTS,RECOVERY_BYTES);
         return clone(next);
       });
     }
     recoveryPoints() {
-      const points=[];for(let i=0;i<this.storage.length;i++){const key=this.storage.key(i);if(key?.startsWith('etfEdgeRecovery:')){try{const p=JSON.parse(this.storage.getItem(key));points.push({key,...p});}catch{}}}
+      const points=[];
+      for(const {key} of this.recoveryEntries()){
+        try {const p=JSON.parse(this.storage.getItem(key));points.push({key,...p});}catch{}
+      }
       return points.sort((a,b)=>b.savedAt-a.savedAt);
     }
   }
