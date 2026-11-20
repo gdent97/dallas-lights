@@ -94,6 +94,7 @@
   }
   el('heldBorrowRows').addEventListener('input',()=>{borrowDirty=true;});
   async function bulkBorrow(unchanged){
+    if(unchanged&&borrowDirty)return alert('You have unsaved edits. Use Save entered checks, or revert the edits before confirming unchanged values.');
     const held=open().filter(a=>a.shortQty>0);
     const d=draft(),ts=Date.now();let n=0,changed=0,missing=0;
     for(const a of held){
@@ -217,28 +218,29 @@
       const agg=agDen>0?agNum/agDen*100:NaN;
       const turnover=Math.abs(sd)*ep+Math.abs(ld)*up;
       const execution=turnover*bps/10000;
-      const borrowCarry=Number.isFinite(b)?sd*ep*b/100*days/365:NaN;
-      // Only long purchases/sales are modeled as changing the actual margin debit.
+      const borrowCarry=sd===0?0:Number.isFinite(b)?sd*ep*b/100*days/365:NaN;
+      // Broker credit from additional shorts is NOT assumed to reduce the margin debit.
       const debitDelta=Number.isFinite(debit)?Math.max(0,debit+ld*up)-debit:NaN;
-      const finance=Number.isFinite(apr)&&Number.isFinite(debitDelta)?debitDelta*apr/100*days/365:NaN;
+      const finance=ld===0?0:Number.isFinite(apr)&&Number.isFinite(debitDelta)?debitDelta*apr/100*days/365:NaN;
       const gain=ld<0&&Number.isFinite(taxBasis)?-ld*(up-taxBasis):NaN;
       const tax=ld<0&&Number.isFinite(gain)&&Number.isFinite(taxRate)?Math.max(0,gain)*taxRate/100:NaN;
-      const total=Number.isFinite(borrowCarry)&&Number.isFinite(finance)?execution+borrowCarry+finance+(Number.isFinite(tax)?tax:0):NaN;
+      const total=Number.isFinite(borrowCarry)&&Number.isFinite(finance)?execution+borrowCarry+finance:NaN;
       let flags=[];
       if(!latestQuote(pair))flags.push('Quotes older than 24h or failed');
       if(sd>0&&(!Number.isFinite(avail)||Date.now()-Number(journal.data.availTs[pair.e]||0)>86400000))flags.push('Short availability not verified within 24h');
       if(sd>0&&Number.isFinite(avail)&&sd>avail)flags.push('Exceeds shares currently shown available');
       if(sd!==0&&!Number.isFinite(b))flags.push('Borrow rate missing');
       if(ld<0&&!Number.isFinite(tax))flags.push('Specific-lot tax estimate missing');
+      if(sd<0)flags.push('Short-cover gain/loss taxes are not estimated');
       if(sc.shortDelta===0&&sc.longDelta===0&&i!==0)flags.push('Target already near existing share count');
       const action=sd>0?'Short '+fmt(sd)+' additional '+pair.e:sd<0?'Cover '+fmt(-sd)+' '+pair.e:ld>0?'Buy '+fmt(ld)+' '+pair.u:ld<0?'Sell '+fmt(-ld)+' '+pair.u:'Hold positions';
       const costText='Execution '+usd(execution,2)+'; incremental '+fmt(days)+'-day borrow '+usd(borrowCarry,2)+'; financing '+usd(finance,2);
-      const taxText=ld<0?'; estimated positive-gain tax '+usd(tax,2):'';
+      const taxText=ld<0?'; separate illustrative long-sale tax '+usd(tax,2):'';
       const record=(sd||ld)?'<button class="secondary ops-prefill" type="button" data-sd="'+sd+'" data-ld="'+ld+'" data-e="'+labelSafe(pair.e)+'">Prefill journal (no execution)</button>':'';
       return '<article class="ops-scenario"><h3>'+sc.name+'</h3><strong>'+action+'</strong>'+
         '<div class="small">Pair hedge: '+percent(pairRatio)+' · Full-book hedge: '+percent(agg)+'</div>'+
         '<div class="small">Turnover '+usd(turnover)+' · '+costText+taxText+'</div>'+
-        '<div class="small"><b>Incremental scenario cost:</b> '+usd(total,2)+' <span class="muted">(missing assumptions shown as —)</span></div>'+
+        '<div class="small"><b>Incremental pre-tax execution & carry:</b> '+usd(total,2)+' <span class="muted">(missing assumptions shown as —; realized gains taxed separately)</span></div>'+
         (flags.length?'<p class="warn small">'+flags.map(labelSafe).join(' · ')+'</p>':'')+record+'</article>';
     });
     el('rebalanceOutput').innerHTML='<p class="small"><strong>Current pair:</strong> '+percent(currentRatio)+' hedge · <strong>Aggregate:</strong> '+percent(currentAggregate)+
