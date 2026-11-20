@@ -39,7 +39,8 @@
     '<h2>Rebalance workbench</h2><p class="small muted">Compare no trade, adjusting short shares, and adjusting long shares. Uses the full recorded hedge book rather than treating a lot in isolation. This is a hypothetical calculation, never an order.</p>'+
     '<div class="ops-input-grid">'+
     '<label>Current pair<select id="rebalanceActivePair"></select></label>'+
-    '<label>Illustrative target hedge %<input id="rebalanceTarget" type="number" min="25" max="200" step=".5" value="95"></label>'+
+    '<label>Pair target hedge %<input id="rebalanceTarget" type="number" min="25" max="200" step=".5" value="95"></label>'+ 
+    '<label>Whole-book target hedge %<input id="rebalanceBookTarget" type="number" min="25" max="200" step=".5" value="100"></label>'+
     '<label>Holding horizon, days<input id="rebalanceHorizon" type="number" min="1" max="365" step="1" value="30"></label>'+
     '<label>Estimated one-way execution friction, bps<input id="rebalanceSpread" type="number" min="0" max="1000" step="1" value="10"></label>'+
     '<label>Specific long tax-lot basis, $/share<input id="rebalanceTaxBasis" type="number" min="0" step=".01" placeholder="Optional; not average basis"></label>'+
@@ -196,8 +197,8 @@
     const active=rebalanceOptions(),pair=active.find(a=>a.e===el('rebalanceActivePair').value)||active[0];
     if(!pair){el('rebalanceOutput').innerHTML='<p class="muted">Record an active paired position to compare adjustments.</p>';return;}
     if(!quoteOK(pair)){el('rebalanceOutput').innerHTML='<p class="warn">Both prices are required for this comparison. Verify your broker quotes.</p>';return;}
-    const target=num(readInput('rebalanceTarget')),days=num(readInput('rebalanceHorizon')),bps=num(readInput('rebalanceSpread'));
-    if(!(target>=25&&target<=200&&days>=1&&days<=365&&bps>=0&&bps<=1000)){el('rebalanceOutput').innerHTML='<p class="warn">Enter valid target, horizon and execution friction assumptions.</p>';return;}
+    const target=num(readInput('rebalanceTarget')),bookTarget=num(readInput('rebalanceBookTarget')),days=num(readInput('rebalanceHorizon')),bps=num(readInput('rebalanceSpread'));
+    if(!(target>=25&&target<=200&&bookTarget>=25&&bookTarget<=200&&days>=1&&days<=365&&bps>=0&&bps<=1000)){el('rebalanceOutput').innerHTML='<p class="warn">Enter valid pair/book targets, horizon and execution friction assumptions.</p>';return;}
     const book=openPriced(),fullBook=book.length===open().length,up=pair.prices.up,ep=pair.prices.ep,L=pair.L;
     const mLong=pair.longQty*up,mShort=pair.shortQty*ep,currentRatio=mLong>0?L*mShort/mLong*100:NaN;
     const currentAggregateDen=book.reduce((s,a)=>s+a.longQty*a.prices.up,0),currentAggregateNum=book.reduce((s,a)=>s+a.L*a.shortQty*a.prices.ep,0);
@@ -208,9 +209,19 @@
     const taxBasis=num(readInput('rebalanceTaxBasis')),taxRate=num(readInput('rebalanceTaxRate'));
     const scenarios=[
       {name:'No trade',shortDelta:0,longDelta:0},
-      {name:'Adjust short ETF',shortDelta,longDelta:0},
-      {name:'Adjust underlying stock',shortDelta:0,longDelta}
+      {name:'Short ETF · pair target',shortDelta,longDelta:0},
+      {name:'Underlying stock · pair target',shortDelta:0,longDelta}
     ];
+    // A book-target adjustment must not force the selected pair beyond its configured band.
+    // If quotes are missing for other held pairs, do not pretend to know the book target.
+    const band=num(journal.data.settings.band),safeBand=Number.isFinite(band)&&band>0&&band<100?band:10;
+    const shortMin=Math.max(0,Math.ceil((100-safeBand)/100*mLong/(L*ep)));
+    const shortMax=Math.max(shortMin,Math.floor((100+safeBand)/100*mLong/(L*ep)));
+    if(fullBook&&currentAggregateDen>0){
+      const desired=Math.round(pair.shortQty+(bookTarget/100*currentAggregateDen-currentAggregateNum)/(L*ep));
+      const feasible=Math.min(shortMax,Math.max(shortMin,desired));
+      scenarios.push({name:'Short ETF · book target (band-limited)',shortDelta:feasible-pair.shortQty,longDelta:0});
+    }
     const rows=scenarios.map((sc,i)=>{
       const sd=sc.shortDelta,ld=sc.longDelta,nS=pair.shortQty+sd,nL=pair.longQty+ld;
       const pairRatio=nL>0?L*nS*ep/(nL*up)*100:NaN;
@@ -244,12 +255,12 @@
         (flags.length?'<p class="warn small">'+flags.map(labelSafe).join(' · ')+'</p>':'')+record+'</article>';
     });
     el('rebalanceOutput').innerHTML='<p class="small"><strong>Current pair:</strong> '+percent(currentRatio)+' hedge · <strong>Aggregate:</strong> '+percent(currentAggregate)+
-      ' · <strong>Illustrative target:</strong> '+percent(target)+'. '+(fullBook?'All held pairs priced.':'Only '+book.length+'/'+open().length+' pairs priced; aggregate ratio is partial.')+
+      ' · <strong>Pair target:</strong> '+percent(target)+' · <strong>Book target:</strong> '+percent(bookTarget)+' (constrained to '+percent(100-safeBand)+'–'+percent(100+safeBand)+' for the selected pair). '+(fullBook?'All held pairs priced.':'Only '+book.length+'/'+open().length+' pairs priced; aggregate ratio is partial.')+
       ' '+(!latestQuote(pair)?'Current pair quotes are stale; do not execute from this preview.':'Verify your execution quotes and borrow before trading.')+'</p>'+
       '<div class="ops-scenarios">'+rows.join('')+'</div>';
   }
   el('rebalanceActivePair').onchange=rebalance;
-  for(const key of ['rebalanceTarget','rebalanceHorizon','rebalanceSpread','rebalanceTaxBasis','rebalanceTaxRate'])el(key).oninput=rebalance;
+  for(const key of ['rebalanceTarget','rebalanceBookTarget','rebalanceHorizon','rebalanceSpread','rebalanceTaxBasis','rebalanceTaxRate'])el(key).oninput=rebalance;
   el('rebalanceOutput').addEventListener('click',evt=>{
     const button=evt.target.closest('.ops-prefill');if(!button)return;
     const sd=Number(button.dataset.sd),ld=Number(button.dataset.ld),e=button.dataset.e;
