@@ -35,7 +35,7 @@ let editingTradeId=null,lastRefreshAt=0,lastSuccessAt=0,refreshRunning=false,ref
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function hydrate(d){({borrow,avail,planned,borrowTs,availTs,trades,adjustments,snapshots,corpState}=ETFData.clone(d));for(const t of trades)if(!PAIRS.some(p=>p.e===t.e))PAIRS.push({e:t.e,u:t.u,L:+t.L,q:'C',hedge:'Imported pair — verify mapping'});}
 hydrate(journal.data);
-async function saveState(next,label){try{await journal.save(next,label);hydrate(journal.data);$('saveStatus').textContent='Saved to '+(journal.mode==='indexedDB'?'IndexedDB':'browser storage')+' at '+new Date().toLocaleTimeString();window.dispatchEvent(new CustomEvent('journal-saved'));renderAll();return true;}catch(e){hydrate(journal.data);alert(e.message);renderSafety();return false;}}
+async function saveState(next,label){try{await journal.save(next,label);hydrate(journal.data);$('saveStatus').textContent='Saved to '+(journal.mode==='indexedDB'?'IndexedDB':'browser storage')+' at '+new Date().toLocaleTimeString();window.dispatchEvent(new CustomEvent('journal-saved'));renderAll();return true;}catch(e){hydrate(journal.data);globalThis.__etfLastSaveError={name:e?.name||'Error',message:String(e?.message||e),label:String(label||'Unknown action'),at:new Date().toISOString()};renderSafety();alert('ETF Edge could not save this change. Existing recorded trades were not overwritten.\n\nVersion: '+(globalThis.__etfBuild||'unknown')+'\nSite: '+location.hostname+'\nStorage: '+journal.mode+'\nError: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'\n\nGo to Backup & recovery and select Run storage diagnosis, then share its report.');return false;}}
 function draft(){return ETFData.clone(journal.data);}
 function id(){return 'x_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)}
 function etDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
@@ -161,6 +161,77 @@ async function capturePerformance(){
 function renderSafety(){let points=journal.recoveryPoints();$('storageWarning').hidden=!journal.error;$('storageWarning').textContent=journal.error?'Existing browser data could not be read. Saving is paused to protect it. '+journal.error.message:'';$('localSafety').textContent=journal.error?'Saving paused':journal.revision?(journal.mode==='indexedDB'?'IndexedDB journal active · ':'Browser journal active · ')+trades.length+' entries · '+adjustments.length+' adjustments':'Existing records loaded. Original browser keys preserved.';if(journal.persistenceWarning)$('localSafety').textContent+=' · '+journal.persistenceWarning;$('recoveryPoints').innerHTML=points.map((p,i)=>`<option value="${i}">${fmtET(p.savedAt)} · ${esc(p.label)} · ${p.data.trades?.length??0} entries</option>`).join('');$('recoveryRestore').disabled=!points.length;$('archiveRows').innerHTML=journal.data.archive.map((x,i)=>`<tr><td>${esc(x.kind)}</td><td>${esc(x.record.e)}</td><td>${fmtET(x.archivedAt)}</td><td><button class="secondary" onclick="recoverArchived(${i})">Recover</button></td></tr>`).join('')||'<tr><td colspan="4">No archived records.</td></tr>';$('activityRows').innerHTML=[...journal.data.activity].reverse().slice(0,100).map(x=>`<tr><td>${fmtET(x.ts)}</td><td>${esc(x.label)}</td></tr>`).join('')||'<tr><td colspan="2">Changes made with this version will appear here.</td></tr>';}
 async function recoverArchived(i){let d=draft(),x=d.archive[i];if(!x)return;const field=x.kind==='trade'?'trades':'adjustments';if(d[field].some(r=>r.id===x.record.id))return alert('This record is already active.');d[field].push(x.record);d.archive.splice(i,1);await saveState(d,'Recovered archived '+x.kind);}
 async function restoreRecoveryPoint(){const point=journal.recoveryPoints()[+$('recoveryPoints').value];if(!point)return;if(!confirm('Revert to '+fmtET(point.savedAt)+'? This changes the active journal to '+point.data.trades.length+' entries and '+point.data.adjustments.length+' adjustments. A recovery copy of the current journal is saved first.'))return;await saveState(point.data,'Restored local recovery point');}
+
+async function storageDiagnosticReport(){
+  const info={build:globalThis.__etfBuild||'unknown',site:location.origin,generated:new Date().toISOString(),
+    storageBackend:journal.mode,journalRevision:journal.revision,
+    appError:journal.error?{name:journal.error.name,message:journal.error.message}:null,
+    migrationWarning:journal.persistenceWarning||null,
+    previousSaveError:globalThis.__etfLastSaveError||null,
+    indexedDBAvailable:typeof indexedDB!=='undefined',
+    indexedDBActive:!!journal.db,
+    recordCounts:{trades:journal.data.trades.length,adjustments:journal.data.adjustments.length,
+      activity:journal.data.activity.length,performance:journal.data.performance.length,
+      recoveries:journal.recoveryPoints().length}};
+  try{
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key?.startsWith('etfEdge')){
+        const value=localStorage.getItem(key)||'';
+        keys.push({name:key.startsWith('etfEdgeRecovery:')?'etfEdgeRecovery:<snapshot>':key,approxBytes:2*(key.length+value.length)});
+      }
+    }
+    info.browserStorage={trackerKeys:keys.length,recoveryCopies:keys.filter(x=>x.name.startsWith('etfEdgeRecovery:')).length,
+      approxBytes:keys.reduce((s,x)=>s+x.approxBytes,0),
+      largestKeys:keys.sort((a,b)=>b.approxBytes-a.approxBytes).slice(0,8)};
+  }catch(e){info.browserStorage={error:e?.message||String(e)};}
+  try{
+    const estimate=await navigator.storage?.estimate?.();
+    if(estimate)info.storageEstimate={usageBytes:estimate.usage,quotaBytes:estimate.quota};
+  }catch(e){info.storageEstimate={error:e?.message||String(e)};}
+  // Isolated probe does not touch the journal or its database.
+  if(typeof indexedDB!=='undefined'){
+    try{
+      const db=await new Promise((resolve,reject)=>{
+        const req=indexedDB.open('ETFEdgeStorageHealthProbe',1);
+        req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('checks'))req.result.createObjectStore('checks')};
+        req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+        req.onblocked=()=>reject(Error('Database blocked by another tab'));
+      });
+      try{
+        await new Promise((resolve,reject)=>{
+          const tx=db.transaction('checks','readwrite');
+          tx.objectStore('checks').put({tested:new Date().toISOString()},'test');
+          tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);
+          tx.onabort=()=>reject(tx.error);
+        });
+        info.indexedDBWriteProbe='passed';
+      }finally{db.close();}
+    }catch(e){info.indexedDBWriteProbe=(e?.name||'Error')+': '+(e?.message||String(e));}
+  }
+  return info;
+}
+async function runStorageDiagnosis(){
+  const button=$('runStorageDiagnosis'),out=$('storageDiagnosisOutput');
+  if(button)button.disabled=true;
+  if(out)out.textContent='Checking browser storage without changing your journal…';
+  try{
+    const report=JSON.stringify(await storageDiagnosticReport(),null,2);
+    if(out)out.textContent=report;
+    $('saveStatus').textContent='Storage diagnostic generated. Copy the report below for troubleshooting.';
+  }catch(e){if(out)out.textContent='Diagnosis failed: '+(e?.message||String(e));}
+  finally{if(button)button.disabled=false;}
+}
+function copyStorageDiagnosis(){
+  const report=$('storageDiagnosisOutput')?.textContent||'';
+  if(!report||report.startsWith('No diagnosis'))return;
+  navigator.clipboard?.writeText(report).then(
+    ()=>$('saveStatus').textContent='Storage diagnosis copied.',
+    ()=>$('saveStatus').textContent='Select and copy the diagnosis text manually.'
+  );
+}
+
 function exportRawStorage(){const out={exportedAt:new Date().toISOString(),raw:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('etfEdge')&&!k.includes('CloudKey'))out.raw[k]=localStorage.getItem(k);}downloadJSON(out,'etf-edge-raw-recovery-'+etDate()+'.json');}
 window.addEventListener('storage',e=>{if(e.key===ETFData.KEY&&e.newValue!==journal.raw){$('storageWarning').hidden=false;$('storageWarning').textContent='Another tab saved newer journal data. Reload this tab before editing to prevent overwriting it.';}});
 window.addEventListener('journal-changed-elsewhere',()=>{$('storageWarning').hidden=false;$('storageWarning').textContent='Another tab saved newer tracker data. Reload this tab before editing.';});
