@@ -112,6 +112,8 @@
           for(const [k,key] of Object.entries(SETTINGS)) if(storage.getItem(key)!=null)d.settings[k]=storage.getItem(key);
           this.data=validate(d);this.revision=0;
         }
+        // Recover browser quota immediately on page load, after validating the active journal.
+        this.pruneRecoveries();
       } catch(e) {this.error=e;this.data=empty();this.revision=0;}
     }
     recoveryEntries() {
