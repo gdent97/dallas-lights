@@ -154,12 +154,13 @@ body{font-size:16px}.tiny,.sourceLine,.freshbadge,.pill{font-size:12px}.small,la
 <details><summary>Archived records</summary><table><thead><tr><th>Kind</th><th>Pair</th><th>Archived</th><th>Recovery</th></tr></thead><tbody id="archiveRows"></tbody></table></details>
 <details><summary>Activity history</summary><table><thead><tr><th>When</th><th>Change</th></tr></thead><tbody id="activityRows"></tbody></table></details>
 <details><summary>Advanced recovery</summary><p class="small">If stored data cannot be read, this exports the original values for repair without modifying them.</p><button class="secondary" onclick="exportRawStorage()">Export original browser data</button></details>
+<div class="note" style="margin-top:10px"><b>Storage health</b><p class="small">If saving fails, this check shows the running version and storage error without exposing your trade values or recovery keys.</p><div class="toolbar"><button id="runStorageDiagnosis" class="secondary" onclick="runStorageDiagnosis()">Run storage diagnosis</button><button class="secondary" onclick="copyStorageDiagnosis()">Copy report</button></div><pre id="storageDiagnosisOutput" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;max-height:280px;overflow:auto">No diagnosis generated.</pre></div>
 <div id="saveStatus" class="tiny muted" style="margin-top:6px"></div>
 </div>
 
 <div class="card small muted"><b>Execution check:</b> Yahoo data is useful for screening, but actual decisions should use current Fidelity bid/ask, borrow rate, available shares, margin requirements, and your actual fills. Leveraged ETFs pursue daily objectives; multi-day results and intraday leverage can differ from the headline multiple.</div>
 
-<script src="/data.js"></script>
-<script src="/bootstrap.js"></script>
+<script src="/data.js?v=2026-11-20c"></script>
+<script src="/bootstrap.js?v=2026-11-20c"></script>
 </body>
 </html>
